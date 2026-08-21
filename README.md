@@ -13,6 +13,7 @@ actually works, which HAL call silently does nothing, and how to get a build ont
 |---|---|---|---|
 | [`stm32h750-weact`](skills/stm32/stm32h750-weact) | WeAct Studio MiniSTM32H7xx core board | STM32H750VBT6 (Cortex-M7) | PlatformIO + STM32Cube HAL |
 | [`esp32c6-lcd147`](skills/esp32/esp32c6-lcd147) | Waveshare ESP32-C6-LCD-1.47 | ESP32-C6FH4 (RISC-V) | PlatformIO + ESP-IDF |
+| [`atmega328p-nano`](skills/avr/atmega328p-nano) | Arduino Nano (A000005) | ATmega328P (AVR 8-bit) | PlatformIO + Arduino core |
 
 ## Install
 
