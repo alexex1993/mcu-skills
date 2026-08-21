@@ -1,0 +1,9 @@
+{
+  "name": "USBDeviceCDC",
+  "version": "1.0.0",
+  "description": "ST USB Device Library (core + CDC class), vendored so it builds with stm32cube.disable_embedded_libs",
+  "license": "BSD-3-Clause",
+  "build": {
+    "flags": ["-I."]
+  }
+}

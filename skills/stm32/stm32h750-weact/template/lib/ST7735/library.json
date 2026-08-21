@@ -1,0 +1,10 @@
+{
+  "name": "ST7735",
+  "version": "1.0.0",
+  "description": "ST7735 LCD component driver from the WeAct MiniSTM32H7xx SDK (ST BSP component, bus-agnostic)",
+  "keywords": "lcd, st7735, display",
+  "license": "BSD-3-Clause",
+  "build": {
+    "flags": ["-I."]
+  }
+}
