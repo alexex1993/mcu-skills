@@ -1,0 +1,9 @@
+# Console goes over the built-in USB-Serial-JTAG, which is the only USB port on
+# the ESP32-C6-LCD-1.47. Without this, printf/ESP_LOG output goes to UART0 pins
+# (GPIO16/17) that nothing on the board is connected to, and the monitor is
+# silent even though the firmware is running.
+CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=y
+
+# The ESP32-C6FH4 on this board has 4 MB of in-package flash, not the 8 MB the
+# generic esp32-c6-devkitc-1 board definition assumes.
+CONFIG_ESPTOOLPY_FLASHSIZE_4MB=y
