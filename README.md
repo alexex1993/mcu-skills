@@ -13,7 +13,14 @@ actually works, which HAL call silently does nothing, and how to get a build ont
 |---|---|---|---|
 | [`stm32h750-weact`](skills/stm32/stm32h750-weact) | WeAct Studio MiniSTM32H7xx core board | STM32H750VBT6 (Cortex-M7) | PlatformIO + STM32Cube HAL |
 | [`esp32c6-lcd147`](skills/esp32/esp32c6-lcd147) | Waveshare ESP32-C6-LCD-1.47 | ESP32-C6FH4 (RISC-V) | PlatformIO + ESP-IDF |
+| [`esp32-wroom-30pin`](skills/esp32/esp32-wroom-30pin) | 30-pin ESP32 devkit (DOIT V1 / CH340 Type-C) | ESP32-D0WDQ6 (Xtensa LX6) | PlatformIO + ESP-IDF |
+| [`esp32-wroom-36pin`](skills/esp32/esp32-wroom-36pin) | 36-pin ESP32 devkit (original DOIT DevKit V1) | ESP32-D0WDQ6 (Xtensa LX6) | PlatformIO + ESP-IDF |
+| [`esp32-wroom-38pin`](skills/esp32/esp32-wroom-38pin) | 38-pin ESP32 devkit (DevKitC V4 / NodeMCU-32S) | ESP32-D0WDQ6 (Xtensa LX6) | PlatformIO + ESP-IDF |
 | [`atmega328p-nano`](skills/avr/atmega328p-nano) | Arduino Nano (A000005) | ATmega328P (AVR 8-bit) | PlatformIO + Arduino core |
+
+The three ESP32-WROOM-32 skills are deliberately separate: the boards share silicon but not
+a header, and the pin map is what a skill is for. Pick by counting pins on one side — 15,
+18 or 19. `esp32-wroom-36pin` §"Confirm the board first" has the decision table.
 
 ## Install
 
