@@ -5,7 +5,8 @@ Every block below is taken verbatim from firmware that builds and runs on this b
 Pin names come from `board.h` in §2.
 
 Contents: 1 project setup · 2 board.h · 3 startup and clocks · 4 GPIO · 5 SPI4 · 6 backlight PWM ·
-7 MSP · 8 LCD glue · 9 fast LCD rendering · 10 ADC temperature · 11 USB CDC · 12 frame pacing.
+7 MSP · 8 LCD glue · 9 fast LCD rendering · 10 ADC temperature · 11 USB CDC · 12 frame pacing ·
+13 DAC1 (both channels) clocked from TIM6, no DMA.
 
 ---
 
@@ -886,3 +887,143 @@ if ((now - last_report) >= 5000U) {
 
 Same reason `HAL_Delay(200)` in a loop is wrong for a 200 ms period: it delays *between* jobs instead
 of pacing them.
+
+---
+
+## 13. DAC1 (both channels), software tick from TIM6, no DMA
+
+Signal generator: TIM6 fires a period-elapsed interrupt at the sample rate, and the ISR writes both
+DAC channels directly. No DMA, no hardware trigger — good up to a few hundred kHz on an M7 at 240 MHz.
+Pins: `DAC1_OUT1` = PA4 (P2 pin 21), `DAC1_OUT2` = PA5 (P2 pin 22) — both analog, no AF register
+involved. This is not in the vendor SDK examples; the classic "TIMx_TRGO → DAC → DMA circular"
+recipe from ST's own examples is unnecessary at these rates.
+
+`board.h` additions:
+
+```c
+extern DAC_HandleTypeDef hdac1;
+extern TIM_HandleTypeDef htim6;
+```
+
+GPIO — plain analog, `GPIO_MODE_ANALOG` needs no `Alternate` field:
+
+```c
+GPIO_InitStruct.Pin  = GPIO_PIN_4 | GPIO_PIN_5;   /* PA4 = DAC1_OUT1, PA5 = DAC1_OUT2 */
+GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+GPIO_InitStruct.Pull = GPIO_NOPULL;
+HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+```
+
+DAC init — `DAC_ChannelConfTypeDef` on H7 has four more mandatory fields than the "classic" HAL DAC
+(F4-style): leaving any of them at `{0}`-default trips the parameter check inside
+`HAL_DAC_ConfigChannel()`. Source: `stm32h7xx_hal_dac.h`.
+
+```c
+static void MX_DAC1_Init(void)
+{
+    DAC_ChannelConfTypeDef sConfig = {0};
+
+    hdac1.Instance = DAC1;
+    if (HAL_DAC_Init(&hdac1) != HAL_OK) {
+        Error_Handler();
+    }
+
+    sConfig.DAC_SampleAndHold           = DAC_SAMPLEANDHOLD_DISABLE;
+    sConfig.DAC_Trigger                 = DAC_TRIGGER_NONE;      /* software tick from TIM6 ISR */
+    sConfig.DAC_OutputBuffer            = DAC_OUTPUTBUFFER_ENABLE;
+    sConfig.DAC_ConnectOnChipPeripheral = DAC_CHIPCONNECT_EXTERNAL;
+    sConfig.DAC_UserTrimming            = DAC_TRIMMING_FACTORY;
+    if (HAL_DAC_ConfigChannel(&hdac1, &sConfig, DAC_CHANNEL_1) != HAL_OK) {
+        Error_Handler();
+    }
+    if (HAL_DAC_ConfigChannel(&hdac1, &sConfig, DAC_CHANNEL_2) != HAL_OK) {
+        Error_Handler();
+    }
+
+    if (HAL_DAC_Start(&hdac1, DAC_CHANNEL_1) != HAL_OK) {
+        Error_Handler();
+    }
+    if (HAL_DAC_Start(&hdac1, DAC_CHANNEL_2) != HAL_OK) {
+        Error_Handler();
+    }
+}
+```
+
+TIM6 — base timer, period-elapsed interrupt at `sample_hz`. TIM6/TIM7 sit on the same APB1 domain as
+TIM3 (§14.3 backlight note applies): at `APB1CLKDivider = RCC_APB1_DIV1` the kernel clock is
+`PCLK1 = 120 MHz` directly, no ×2.
+
+```c
+#define TIM_CLK_HZ   120000000UL
+
+static void MX_TIM6_Init(uint32_t sample_hz)
+{
+    htim6.Instance         = TIM6;
+    htim6.Init.Prescaler   = 0;
+    htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
+    htim6.Init.Period      = (TIM_CLK_HZ / sample_hz) - 1;
+    htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+    if (HAL_TIM_Base_Init(&htim6) != HAL_OK) {
+        Error_Handler();
+    }
+    if (HAL_TIM_Base_Start_IT(&htim6) != HAL_OK) {
+        Error_Handler();
+    }
+}
+```
+
+MSP — the clock-enable macro is **`__HAL_RCC_DAC12_CLK_ENABLE()`**, not `__HAL_RCC_DAC1_CLK_ENABLE`:
+DAC1 and DAC2 share one RCC bit (`RCC_APB1LENR_DAC12EN`).
+
+```c
+void HAL_DAC_MspInit(DAC_HandleTypeDef *hdac)
+{
+    if (hdac->Instance == DAC1) {
+        __HAL_RCC_DAC12_CLK_ENABLE();     /* NOT __HAL_RCC_DAC1_CLK_ENABLE -- does not exist */
+    }
+}
+
+void HAL_TIM_Base_MspInit(TIM_HandleTypeDef *htim)
+{
+    if (htim->Instance == TIM6) {
+        __HAL_RCC_TIM6_CLK_ENABLE();
+        HAL_NVIC_SetPriority(TIM6_DAC_IRQn, 1, 0);   /* shared vector, see below */
+        HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
+    }
+}
+```
+
+**Vector name trap:** TIM6 shares its interrupt vector with DAC underrun errors —
+`TIM6_DAC_IRQn` / `TIM6_DAC_IRQHandler` — while TIM7 has an ordinary standalone vector,
+`TIM7_IRQn` / `TIM7_IRQHandler`. Source: `stm32h750xx.h` (`IRQn_Type`) and
+`startup_stm32h750xx.s`. Get the handler name wrong and the interrupt silently never fires
+(no fault, no warning — the linker's weak default handler just sits there doing nothing).
+
+ISR, in `stm32h7xx_it.c`:
+
+```c
+void TIM6_DAC_IRQHandler(void)
+{
+    HAL_TIM_IRQHandler(&htim6);
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+    if (htim->Instance == TIM6) {
+        HAL_DAC_SetValue(&hdac1, DAC_CHANNEL_1, DAC_ALIGN_12B_R, next_sample_ch1());
+        HAL_DAC_SetValue(&hdac1, DAC_CHANNEL_2, DAC_ALIGN_12B_R, next_sample_ch2());
+    }
+}
+```
+
+With `DAC_Trigger = DAC_TRIGGER_NONE`, `HAL_DAC_SetValue()` moves the value from the DHR register to
+the output automatically, one APB1 clock after the write — no hardware trigger and no DMA needed for
+sample rates up to a few hundred kHz.
+
+**Unrelated HAL gotcha worth knowing before wiring up TIM6/TIM7 or TIM3 alongside this:** a
+`TIM_HandleTypeDef` has two independent weak MSP callbacks — `HAL_TIM_Base_Init()` calls
+`HAL_TIM_Base_MspInit()`, `HAL_TIM_PWM_Init()` calls a *different* one, `HAL_TIM_PWM_MspInit()`. If a
+PWM channel's clock-enable only lives in `HAL_TIM_Base_MspInit` and you call `HAL_TIM_PWM_Init()`
+without first calling `HAL_TIM_Base_Init()`, the clock is never enabled — and this does not fail, the
+timer just stays silent. Always call `HAL_TIM_Base_Init()` before `HAL_TIM_PWM_Init()` on the same
+handle, as §6/§7 already does for TIM1.

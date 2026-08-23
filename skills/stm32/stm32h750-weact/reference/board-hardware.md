@@ -403,6 +403,15 @@ is unused (and for PA7/PD4/PD6 the jumpers SB1/SB2/SB3 can isolate it physically
 For the mechanical placement of each pin see `Hardware/STM32H7xx_BoardShape Board Shape 外形 V12.pdf`
 and sheet 1 of the schematic (P1/P2 "Header 22X2").
 
+**The 1–44 pin numbers above are a schematic/datasheet convention, not board silkscreen.** The
+physical board prints only the port/pin name next to each row (e.g. "A4", "B0"), with the leading
+"P" dropped — nowhere on the PCB does the text "21" or "pin 21" appear. "PA4 = P2 pin 21" is correct
+for wiring a schematic but useless for someone reading the physical board with a finger on it; read
+off the printed port name instead, and count from a reference mark (e.g. the "K1" button label) if
+two rows of similar-looking names are close together — the bottom of P1 ("B15 B14 B13 B12") is easy
+to mistake at a glance for the low pins of P2 ("B0 B1"/"B10 B11") if you are not counting from a
+fixed point.
+
 ### 5.8 Header P3 "SW" (debug)
 4 pins, 2.54 mm: pin 1 `3V3 (VDD-MCU)`, pin 2 `SWDIO` (PA13 through R2 22 Ω), pin 3 `SWCLK`
 (PA14 through R3 22 Ω), pin 4 `GND`.
@@ -987,6 +996,40 @@ must call `HAL_PCD_IRQHandler(&hpcd_USB_OTG_FS)`.
 A CDC ACM port on this cable means `pio device monitor` needs no extra hardware — which is why it is
 worth adding early, before you need to debug something. Set `monitor_dtr = 1`.
 
+### 14.7 DAC1 on PA4/PA5, and the AF for other "genuinely free" pins
+
+Neither DAC is used by any on-board function or vendor example — PA4/PA5 (`DAC1_OUT1`/`DAC1_OUT2`,
+P2 pins 21/22, both already listed as "genuinely free" in §5.7) are plain analog pins, no AF register
+involved. Full working recipe (channel config, TIM6 sample-rate ISR, no DMA) is in
+`recipes.md` §13. Two board-independent traps worth knowing before reaching for it:
+
+- Clock-enable macro is **`__HAL_RCC_DAC12_CLK_ENABLE()`**, not `__HAL_RCC_DAC1_CLK_ENABLE` — DAC1
+  and DAC2 share one RCC bit.
+- On H7, `DAC_ChannelConfTypeDef` has four fields beyond the F4-era struct
+  (`DAC_ConnectOnChipPeripheral`, `DAC_UserTrimming`, `DAC_TrimmingValue`, `DAC_SampleAndHoldConfig`)
+  that must all be set explicitly or `HAL_DAC_ConfigChannel()` fails its parameter check.
+
+**Alternate-function table for free pins actually used in this project** (this skill does not yet
+carry a full AF map for every one of the 35 free GPIOs in §5.7 — only these are build-and-flash
+verified):
+
+| Pin | Header | Function used | AF |
+|---|---|---|---|
+| PA4 | P2 pin 21 | DAC1_OUT1 | analog, no AF |
+| PA5 | P2 pin 22 | DAC1_OUT2 | analog, no AF |
+| PB0 | P2 pin 27 | TIM3_CH3 | `GPIO_AF2_TIM3` (0x02) |
+
+PB1 (P2 pin 28) should by the same logic be `TIM3_CH4` on `GPIO_AF2_TIM3` too, but this project never
+drove it — treat that one entry as unverified until someone builds against it. For any other free
+pin, get the AF value from `stm32h7xx_hal_gpio_ex.h` (`GPIO_AFx_yyy` defines) or CubeMX's pinout view
+rather than assuming a pattern.
+
+If you add a base timer (TIM6/TIM7) for a periodic tick — as the DAC recipe does — note the shared
+vector name: **`TIM6_DAC_IRQn`/`TIM6_DAC_IRQHandler`** (TIM6 shares its vector with DAC underrun
+errors), but **`TIM7_IRQn`/`TIM7_IRQHandler`** (ordinary standalone vector). Naming the handler wrong
+is a silent failure — no build error, the interrupt just never fires because the weak default handler
+catches it instead.
+
 ---
 
 ## 15. Cortex-M7 / H7 Behaviours That Bite
@@ -1100,6 +1143,18 @@ It is also the cheapest profiler available: bracket a block with `DWT->CYCCNT` r
 - ADC3 is in the D3 domain: it keeps running in Stop mode, but its clock has to be configured
   separately from D1/D2 peripherals.
 
+### 15.6 `HAL_TIM_Base_MspInit` vs `HAL_TIM_PWM_MspInit` — not board-specific, but easy to hit here
+
+This is a general HAL quirk, not a board fact, but every timer recipe in this skill (§6/§14.3 backlight
+PWM, §14.7/recipes.md §13 DAC tick) runs into its shape. A `TIM_HandleTypeDef` has **two separate weak
+MSP callbacks**: `HAL_TIM_Base_Init()` calls `HAL_TIM_Base_MspInit()`, while `HAL_TIM_PWM_Init()`
+calls a *different* one, `HAL_TIM_PWM_MspInit()`. If the peripheral clock-enable is only placed inside
+`HAL_TIM_Base_MspInit` (as in the TIM1 MSP in `recipes.md` §7) and `HAL_TIM_Base_Init()` is called
+before `HAL_TIM_PWM_Init()` on the same handle, everything works — the empty weak
+`HAL_TIM_PWM_MspInit` stub is harmless. Call `HAL_TIM_PWM_Init()` **without** a preceding
+`HAL_TIM_Base_Init()`, and the clock is never enabled — silently: no HAL error, the timer just never
+ticks. Always init Base before PWM on the same handle.
+
 ---
 
 ## 16. Flashing, Debugging, Recovery
@@ -1112,6 +1167,23 @@ It is also the cheapest profiler available: bracket a block with `DWT->CYCCNT` r
 
 The board does not reset itself into DFU — the sequence is manual every time. If `upload` reports no
 DFU device, the board is still running the previous firmware.
+
+**Benign error after 100% download.** `dfu-util` with the STM32 ROM bootloader routinely prints an
+error on a perfectly successful flash:
+
+```
+Download done.
+File downloaded successfully
+Submitting leave request...
+dfu-util: Error during download get_status
+*** [upload] Error 74
+```
+
+This is not a failed flash. After reaching 100%, `dfu-util` sends the "leave DFU mode" command; the
+MCU resets into the freshly written application immediately and never gets to answer the trailing
+`get_status` request that `dfu-util` sends next, so it reports the timeout as an error. Check the
+board (screen content, LED behavior, USB re-enumeration) before assuming the upload failed — it
+almost certainly didn't.
 
 ### 16.2 SWD
 
@@ -1165,3 +1237,9 @@ bootloader's UART ISP mode uses.
 | Periodic job drifts slow | `HAL_Delay()` used as a period | Deadline comparison against `HAL_GetTick()` |
 | Sub-millisecond pacing impossible | SysTick is 1 ms | DWT cycle counter at 240 MHz (§15.4) |
 | `DWT->CYCCNT` stays zero | M7 needs the lock unlocked | `DWT->LAR = 0xC5ACCE55` (§15.4) |
+| `HAL_DAC_ConfigChannel()` fails its parameter check | H7's `DAC_ChannelConfTypeDef` has 4 fields beyond the F4-era struct, left at `{0}` | Set `DAC_ConnectOnChipPeripheral`/`DAC_UserTrimming`/etc. explicitly (§14.7, recipes.md §13) |
+| DAC clock-enable macro not found | Guessing `__HAL_RCC_DAC1_CLK_ENABLE` | It's `__HAL_RCC_DAC12_CLK_ENABLE()` — DAC1/DAC2 share one RCC bit (§14.7) |
+| A TIM6-based ISR never fires, no error | Vector named `TIM6_IRQHandler` instead of the shared one | `TIM6_DAC_IRQn`/`TIM6_DAC_IRQHandler`; TIM7 alone is the ordinary `TIM7_IRQn` (§14.7) |
+| PWM channel silent, no HAL error | `HAL_TIM_PWM_Init()` called without a prior `HAL_TIM_Base_Init()` on the same handle | Always init Base before PWM — two separate MSP callbacks (§15.6) |
+| `dfu-util: Error during download get_status` / `Error 74` right after "File downloaded successfully" | MCU resets into the app before answering the trailing `get_status` | Benign — the flash succeeded; verify on the board, not by the exit code (§16.1) |
+| Can't find "pin 21" printed on the board | 1–44 numbering is a schematic convention; silkscreen shows only port names, no leading "P" | Read the printed port name (e.g. "A4") and count from a reference mark like "K1" (§5.7) |
