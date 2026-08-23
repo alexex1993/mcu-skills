@@ -126,6 +126,11 @@ or wiring an external JTAG probe to GPIO12/13/14/15 (MTDI/MTCK/MTMS/MTDO) — an
 the MTDI strapping pin, so a probe that idles it high will not let the board boot. In
 practice, on this board, you debug over UART0.
 
+If you do wire a probe: the board definition's `openocd_board` is `esp-wroom-32.cfg`, but
+that file (shipped in `tool-openocd-esp32`) is upstream-deprecated — it just sets
+`ESP32_FLASH_VOLTAGE 3.3` and sources `target/esp32.cfg`. Source `target/esp32.cfg` directly
+with your interface config instead of chasing the deprecated board file.
+
 ## 4. Power
 
 ```

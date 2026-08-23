@@ -156,7 +156,16 @@ fails, `esptool.py -p <port> erase_flash` — a 4 MB erase takes 20–60 s, so i
 probably not hung.
 
 There is no debug header. JTAG is the same Type-C port, via the built-in USB
-Serial/JTAG controller (`openocd -f board/esp32c6-builtin.cfg`).
+Serial/JTAG controller — but not with the openocd PlatformIO installs for this board.
+`platform-espressif32`'s `platform.json` pins `tool-openocd-esp32` to `~2.1100.0`
+(installed: `2.1100.20220706`), and that build predates the ESP32-C6 entirely: it ships
+`board/esp32c3-builtin.cfg` and `board/esp32s3-builtin.cfg` but no `esp32c6-builtin.cfg`
+and no `target/esp32c6.cfg` anywhere in the package. `pio debug` / a bare
+`openocd -f board/esp32c6-builtin.cfg` fails with "Can't find board/esp32c6-builtin.cfg"
+on this toolchain, which reads like a typo rather than a missing chip target. Use a
+current upstream `openocd-esp32` release (Espressif's fork, not PlatformIO's pinned
+copy) or an ESP-IDF export'd environment's own `idf.py openocd`, either of which does
+carry ESP32-C6 support.
 
 ## Reporting
 

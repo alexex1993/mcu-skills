@@ -18,6 +18,9 @@ board_build.core = earlephilhower   ; without this you get the Mbed core:
 monitor_speed = 115200              ; baud ignored by USB CDC
 build_flags =
     -Wall
+; board_build.filesystem_size = 1MB ; uncomment for LittleFS/FatFS — default
+                                    ; is 0MB, so begin() mounts empty/fails
+                                    ; silently without this
 ```
 
 ## 2. board.h

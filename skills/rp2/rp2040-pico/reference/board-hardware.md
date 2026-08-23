@@ -15,7 +15,7 @@ datasheet RP2040-DS-1.4.3+); Part II is the development guide. Sources:
 | Logic levels | 3.3 V fixed (IOVDD tied to the 3V3 rail); default drive 4 mA, 12 mA max per pin |
 | LED | GPIO25, **active-HIGH**, not on the header (TP5 test point only) |
 | Button | **BOOTSEL** — only sampled at power-up; not a runtime user button |
-| USB | micro-B, USB 1.1 Full Speed, device or host; PHY on-chip, 27 Ω series resistors on board |
+| USB | micro-B, USB 1.1 Full Speed, device or host; PHY on-chip, 27 Ω series resistors on board; running firmware enumerates as `2E8A:000A` ("Raspberry Pi" / "Pico"); **BOOTSEL mode enumerates as a different ID, `2E8A:00C0`** (the board definition's own `hwids`) — a udev rule or picotool permission fix scoped only to `000A` will not see the board while it's sitting in BOOTSEL, which looks identical to "board not detected" |
 | ADC | 12-bit, 500 ksps, 4 channels on GPIO26-29 + channel 4 = die temperature sensor |
 | PWM | 16 channels (8 slices × A/B); every GPIO 0-29 can be a PWM output |
 | Debug | 3-pin SWD header on the bottom edge (SWCLK, GND, SWDIO), ~60 kΩ internal pull-ups |
@@ -141,7 +141,7 @@ overclocking and say so when reporting.
 | XIP flash | `0x10000000` | 2 MB | code executes in place; no-cache/-no-alloc aliases at `0x1100…`/`0x1200…`/`0x1300…` |
 | — EEPROM emulation | `0x101ff000` | 4 KB | last flash sector, arduino-pico EEPROM + filesystem default |
 | SRAM0-3 striped | `0x20000000` | 256 KB | interleave optimized for dual-core |
-| SRAM4, SRAM5 | `0x20040000`, `0x20041000` | 4 KB each | non-striped; SRAM5 = core 1 stack by default |
+| SRAM4, SRAM5 | `0x20040000`, `0x20041000` | 4 KB each | non-striped; verified against `memmap_default.ld`: SRAM4 (`SCRATCH_X`) = **core 1**'s stack (`__StackOneTop`), SRAM5 (`SCRATCH_Y`) = **core 0**'s (main) stack (`__StackTop`) — the reverse of what the bank numbering suggests. A core-1 stack overflow corrupts the bottom of SRAM4, not SRAM5 |
 | SRAM non-striped alias | `0x21000000` | 256 KB | SRAM0-3 without interleave |
 | XIP cache as SRAM | `0x15000000` | 16 KB | usable as RAM with caching disabled (erratum E9 applies) |
 | APB peripherals | `0x40000000`+ | — | UART0 `0x40034000`, SPI0 `0x4003c000`, I2C0 `0x40044000`, ADC `0x4004c000`, PWM `0x40050000`, TIMER `0x40054000` … |
@@ -151,6 +151,20 @@ overclocking and say so when reporting.
 Flash layout from `0x10000000`: 256 B boot2 (W25Q080 second-stage
 bootloader), then the program; PlatformIO reports a maximum sketch size of
 2,093,056 B with the last 4 KB reserved.
+
+The 4 KB EEPROM reservation is unconditional — the platform-raspberrypi
+builder (`fetch_fs_size()`) always computes
+`maximum_sketch_size = flash_size - 4096 - filesystem_size`, whether or not
+the sketch includes `<EEPROM.h>`. `filesystem_size` comes from
+`board_build.filesystem_size` in `platformio.ini` (**default `0MB`**) and,
+if set, is carved out immediately below the EEPROM sector — the linker
+symbols `_FS_start`/`_FS_end`/`_EEPROM_start` that `LittleFS`/`FatFS`/
+`EEPROM` read at runtime are computed from exactly this arithmetic. Leave
+`filesystem_size` at its default and `LittleFS.begin()` mounts (or silently
+formats) a 0-byte volume — no build error, no crash, just an empty
+filesystem. Set `board_build.filesystem_size = 1MB` (or `2MB`/`4MB`/…)
+before shipping anything that uses on-flash storage, and flash the initial
+image once with `pio run -t uploadfs`.
 
 ## 6. Errata that matter on this board
 
@@ -288,11 +302,15 @@ timing — anything bit-banging can't hold. Reference: RP2040 datasheet §3.6.
    2 MB including EEPROM and any filesystem. The board re-enumerates as
    `RPI-RP2` when done.
 4. **SWD:** the 3-pin header (SWCLK, GND, SWDIO) with a second Pico
-   flashed as Picoprobe, or any CMSIS-DAP probe. `upload_protocol =
-   picoprobe` (or `cmsis-dap`), `debug_tool = picoprobe`. SWD can also
-   rescue a board whose flash is thoroughly wedged — the boot ROM is mask
-   ROM and survives everything: **no firmware can permanently brick a
-   Pico**.
+   flashed as Picoprobe, or any CMSIS-DAP probe, or a Raspberry Pi Debug
+   Probe (`upload_protocol = raspberrypi-swd`). `upload_protocol =
+   picoprobe` (or `cmsis-dap`), `debug_tool = picoprobe`. A single board
+   can also self-host: flashing the `pico-debug` firmware (openocd ships
+   `board/pico-debug.cfg`) turns core 1 into a CMSIS-DAP probe for core 0
+   over the same USB cable — no second Pico needed, at the cost of that
+   sketch's access to core 1. SWD can also rescue a board whose flash is
+   thoroughly wedged — the boot ROM is mask ROM and survives everything:
+   **no firmware can permanently brick a Pico**.
 
 The monitor: `pio device monitor` attaches to the CDC port
 (`/dev/cu.usbmodem*`, `COMx`); baud ignored.
@@ -315,3 +333,5 @@ The monitor: `pio device monitor` attaches to the CDC port
 | `while(!Serial)` sketch "hangs" at boot | waits for the host to open the port | remove the wait, or open the monitor |
 | WDT reset happens at half the programmed timeout | erratum E1 | program 2× the desired timeout |
 | board not detected as RPI-RP2 despite BOOTSEL | USB cable is power-only | use a data cable |
+| Linux: BOOTSEL drive/picotool visible as root only, invisible to a udev rule scoped to the running-firmware ID | BOOTSEL mode enumerates as `2E8A:00C0`, not the `2E8A:000A` the running sketch uses | add a udev rule (or picotool's own `udev/99-picotool.rules`) covering `00C0` too |
+| `LittleFS.begin()` mounts an empty/0-byte volume | `board_build.filesystem_size` is `0MB` (the default) — no flash region was reserved | set `board_build.filesystem_size = 1MB`+ in `platformio.ini`, `pio run -t uploadfs` once |

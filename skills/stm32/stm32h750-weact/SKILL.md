@@ -34,8 +34,13 @@ wrongly).
 
 Check these before writing code — each one produces a failure that looks like something else.
 
-1. **`-DHSE_VALUE=25000000`** in `build_flags`. Without it the PLL still locks but every derived
-   timing is wrong by ~3×.
+1. **`-DHSE_VALUE=25000000`** in `build_flags`. The stock `framework-stm32cubeh7` CMSIS template
+   already defaults `HSE_VALUE` to 25 MHz — matching this board's crystal by coincidence, the same
+   way the F4 template does for the Black Pill — so this currently works without the flag. It stops
+   working the moment a CubeMX-generated `stm32h7xx_hal_conf.h` from a different H7 board (most
+   Nucleo/Eval H7 boards run their HSE from an 8 MHz ST-Link MCO) gets dropped in: the PLL still
+   locks, but every derived timing is wrong by ~3×. Set it explicitly so the project doesn't depend
+   on which `hal_conf.h` happens to be in play.
 2. **`PWR_LDO_SUPPLY`** — this board has no SMPS. Configuring one leaves the core under-supplied and
    unresponsive to SWD until a BOOT0 power cycle. The setting latches on first write after reset.
 3. **Fix the board definition's swapped sizes** in `platformio.ini`:
@@ -53,6 +58,10 @@ Check these before writing code — each one produces a failure that looks like 
    mandatory or the pin never drives.
 9. **USB needs `HAL_PWREx_EnableUSBVoltageDetector()`** plus `HSI48State = RCC_HSI48_ON`. Missing it
    means the host sees nothing at all.
+9a. **The AF macro is `GPIO_AF10_OTG2_FS`, not `GPIO_AF10_OTG1_FS`.** This part has two USB_OTG
+    controllers, so `stm32h7xx_hal_gpio_ex.h` defines `USB2_OTG_FS` and compiles out the `OTG1_FS`
+    macro name entirely — code copied from an H7A3/H72x example (which has only one controller)
+    fails to build with an undefined-identifier error that doesn't say why.
 10. **LCD and camera reset lines are tied to the board reset net** — no GPIO control, ever. A wedged
     panel needs a full MCU reset.
 

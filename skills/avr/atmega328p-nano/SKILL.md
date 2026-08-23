@@ -180,7 +180,9 @@ The recovery route is the 6-pin ICSP header with a second Arduino running
 `11.ArduinoISP`, a USBasp, or `avrdude` — it bypasses the bootloader
 entirely, so **no bad firmware permanently bricks this board**. `Burn
 Bootloader` over ICSP also restores the fuse set (LOW=0xFF, HIGH=0xDA,
-EXT=0x05) — the fix for clones with mis-set clock fuses and for WDT
+EXT=0xFD — PlatformIO's own board definition; `avrdude` reads back the
+equivalent 0x05 on some tools since only the low 3 BODLEVEL bits are
+implemented) — the fix for clones with mis-set clock fuses and for WDT
 boot-loops. ICSP is also how to upload bootloader-less and reclaim the
 reserved 2 KB.
 

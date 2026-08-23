@@ -641,6 +641,14 @@ upload_protocol = stlink     ; if you would rather flash this way too
 
 SWD is the only way to get breakpoints, and the only way to recover from firmware that breaks USB.
 
+Using openocd instead of the vendor tool (`debug_tool = stlink` still works, but for a raw
+`openocd -f interface/stlink.cfg -f target/stm32f4x.cfg` session) the board definition's own target
+is `stm32f4x`, not a Black-Pill-specific config — there isn't one, this is a bare core board. For a
+register-level view in a debugger that wants an SVD (Cortex-Debug in VS Code, or `arm-none-eabi-gdb`
+with an SVD-aware front end), the board definition points at `STM32F411xx.svd`, which PlatformIO's
+`ststm32` platform ships at `platforms/ststm32/misc/svd/STM32F411xx.svd` — point your tooling there
+directly rather than hunting for a separate download.
+
 ### 16.3 When the board stops responding
 
 Ordered by how much it costs you:

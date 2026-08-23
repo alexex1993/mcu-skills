@@ -29,7 +29,7 @@ rail — so read the reference files rather than guessing.
 | MCU | RP2040 — 2× ARM Cortex-M0+ @ **133 MHz** (arduino-pico default; SDK default 125 MHz), 40 nm QFN-56 |
 | Memory | 264 KB SRAM (6 banks), **no internal flash** — 2 MB W25Q16JV QSPI, XIP from `0x10000000` + 16 KB cache. Max sketch 2,093,056 B (last 4 KB = emulated EEPROM) |
 | LED / button | LED = GPIO25, **active-HIGH**, not on the header · BOOTSEL button, sampled **at power-up only** |
-| USB | micro-B, FS device/host; `Serial` = **USB CDC**; 1200-baud touch reboots into BOOTSEL |
+| USB | micro-B, FS device/host; `Serial` = **USB CDC**; 1200-baud touch reboots into BOOTSEL; enumerates as VID:PID `2E8A:000A` ("Raspberry Pi" / "Pico") once the sketch is running |
 | ADC | 12-bit 500 ksps: A0=GPIO26, A1=27, A2=28, **A3=GPIO29 = VSYS/3 (internal)** + channel 4 = die temp; `analogRead` is **10-bit by default**; ENOB 8.7 bits |
 | PWM | every GPIO, 16 ch (8 slices × 2); `analogWrite` default 8-bit @ 1 kHz; **GPIO 2n & 2n+1 share one slice** |
 | Bus defaults | Wire = 4/5 · **Wire1 = 26/27 (= A0/A1!)** · SPI = 17/18/19/16 · Serial1 = 0/1 · Serial2 = 8/9 |
@@ -109,6 +109,17 @@ Each of these produces a failure that looks like something else.
     shorted low — that pin disables the entire SMPS. The 3V3 pin (36) is an
     output (< 300 mA); never back-feed it. RUN (pin 30) shorted to GND is
     the reset button.
+15. **LittleFS/FatFS silently gets zero bytes unless you ask for space.**
+    The build always reserves the last 4 KB of flash for `EEPROM.h`
+    (`maximum_sketch_size = flash_size - 4096 - filesystem_size`,
+    `board_build.filesystem_size` default **`0MB`**), and any littlefs/fatfs
+    region is carved out of flash *below* that, sized by that same option.
+    `LittleFS.begin()` on the stock template returns `false` (or mounts an
+    empty 0-byte volume) — not a build error, not a crash — because nothing
+    was reserved. Set `board_build.filesystem_size = 1MB` (or `2MB`, `4MB`
+    …) in `platformio.ini` before using `LittleFS`, `FatFS` or `SDFS`'s
+    flash-backed mode, and re-flash with `pio run -t uploadfs` once for the
+    initial image.
 
 ## When the task is analog measurement
 

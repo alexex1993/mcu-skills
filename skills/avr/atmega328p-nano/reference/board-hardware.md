@@ -199,7 +199,7 @@ VIN pin (7–15 V) ────┘        │                          │
 - No PLL, no internal-RC calibration needed in software; `F_CPU = 16000000UL` is fixed by the Arduino core.
 - **Real Time Counter with separate oscillator** is an ATmega328P feature, but on this package the TOSC1/TOSC2 function is multiplexed with XTAL1/XTAL2 — since those carry the 16 MHz crystal, the asynchronous RTC/Timer2 operation is **not usable** on the Nano.
 - `millis()`/`micros()`/`delay()` are derived from Timer0 (prescaler 64 → 1.024 ms tick with software correction); `delayMicroseconds()` is cycle-counted.
-- Typical factory fuse configuration on genuine boards: LOW=0xFF, HIGH=0xDA, EXT=0x05 (verify with `avrdude` before relying on it, especially on clones).
+- Fuse set PlatformIO actually burns for this board (`nanoatmega328new.json` / `nanoatmega328.json`, identical for both): **lfuse=0xFF, hfuse=0xDA, efuse=0xFD**, lock=0x0F. `avrdude -U efuse:r:-:h` on a genuine or correctly-fused clone reads back **0xFD**, not the 0x05 sometimes quoted elsewhere — only the low 3 bits (BODLEVEL, brown-out at 2.7 V) are implemented on the ATmega328P's extended fuse byte, per `avrdude.conf`'s bit template for `efuse` (`x x x x x i i i`); the top 5 bits are unimplemented and always read back as 1. 0x05 and 0xFD are electrically the *same* fuse (BODLEVEL=101); a verify step that expects 0x05 will report a false mismatch against a correctly-programmed chip.
 
 ## 6. Memory map
 
@@ -207,8 +207,8 @@ AVR Harvard architecture: program flash, data SRAM and EEPROM are in **separate 
 
 | Region | Size | Address range (ATmega328P) | Notes |
 |---|---|---|---|
-| Flash (program) | 32 KB (16 K × 16-bit words) | 0x0000–0x7FFF (bytes) | Application: 0x0000–0x77FF (**30,720 bytes**, ~0.5 KB of the reserved area is actually unused by Optiboot). Boot section: 0x7800–0x7FFF (2 KB reserved) |
-| Boot section | 2 KB reserved (0.5 KB used by Optiboot; 2 KB by the old ATmegaBOOT) | 0x7800–0x7FFF | Bootloader; entered after reset, times out to the application |
+| Flash (program) | 32 KB (16 K × 16-bit words) | 0x0000–0x7FFF (bytes) | Application: 0x0000–0x77FF (**30,720 bytes** — matches `upload.maximum_size` in both board JSONs exactly). Boot section: 0x7800–0x7FFF (2 KB reserved) |
+| Boot section | 2 KB reserved by the hfuse (BOOTSZ=00 from hfuse=0xDA) | 0x7800–0x7FFF | Bootloader; entered after reset, times out to the application |
 | SRAM (data) | 2 KB | 0x0100–0x08FF in data space | Registers R0–R31 at 0x00–0x1F; I/O at 0x20–0x5F (0x00–0x3F in `IN`/`OUT` address space); extended I/O 0x60–0xFF; stack starts at 0x08FF and grows downward — usable heap+stack+globals ≈ 2 KB total |
 | EEPROM | 1 KB | 0x000–0x3FF (not memory-mapped) | Accessed via `EEPROM` library or EEAR/EEDR/EECR registers |
 
@@ -220,7 +220,7 @@ Practical consequences:
 
 ## 7. Vendor SDK and examples
 
-- **Arduino AVR core** (bundled with the Arduino IDE, package `Arduino AVR Boards`): board definition `arduino:avr:nano`, variants for ATmega328P / ATmega328P (Old Bootloader) / ATmega168P. In PlatformIO: `platform = atmelavr`, `board = nanoatmega328p` (see §8).
+- **Arduino AVR core** (bundled with the Arduino IDE, package `Arduino AVR Boards`): board definition `arduino:avr:nano`, variants for ATmega328P / ATmega328P (Old Bootloader) / ATmega168P. In PlatformIO: `platform = atmelavr`, `board = nanoatmega328new` (Optiboot) or `nanoatmega328` (old bootloader) — **not** `nanoatmega328p`, which is not a registered board id and fails `pio run` with "Unknown board ID" (see §8).
 - **Tools supported by the board** (per official manual): Arduino Desktop IDE (https://www.arduino.cc/en/software), Arduino CLI, Arduino Cloud Editor (https://create.arduino.cc/editor, guide: https://docs.arduino.cc/arduino-cloud/guides/editor/).
 - **Examples**: IDE "File → Examples" menu and Arduino Documentation (https://docs.arduino.cc/hardware/nano). Key built-ins for this board: `01.Basics → Blink` (the template's minimal variant is exactly this), `Communication`, `Analog`, `Digital`, and `11.ArduinoISP` for reflashing via ICSP.
 - **Online resources**: Project Hub (Nano projects: `part_id=11332`), Library Reference (https://www.arduino.cc/reference/en/libraries/), store (https://store.arduino.cc/).
@@ -253,7 +253,7 @@ Practical consequences:
 5. `Tools → Port` → the board's COM port (unplug/replug to identify it).
 6. Write/load the sketch and click **Upload** — the IDE opens the serial port, auto-reset fires, and the bootloader receives the image via UART.
 
-**PlatformIO** (what `template/` uses): `platform = atmelavr`, `board = nanoatmega328p`, `framework = arduino`, `monitor_speed = 115200`. For old-bootloader boards add `upload_speed = 57600` (see §12). Build with `pio run`, upload with `pio run -t upload -t monitor`.
+**PlatformIO** (what `template/` uses): `platform = atmelavr`, `board = nanoatmega328new`, `framework = arduino`, `monitor_speed = 115200`. For old-bootloader boards, switch to `board = nanoatmega328` — its `upload.speed` is 57600 by board definition, so `upload_speed` does not need to be set by hand (see §12). Build with `pio run`, upload with `pio run -t upload -t monitor`.
 
 **Alternatives**: Arduino CLI (`arduino-cli compile --fqbn arduino:avr:nano` / `arduino-cli upload -p COMx --fqbn arduino:avr:nano`; add `--board-options processor=atmega328pold` for old-bootloader boards), Arduino Cloud Editor (browser, always up to date, sketches in the cloud, needs the plugin only).
 
@@ -344,7 +344,7 @@ Timer-to-resource map (for conflict planning): Timer0 → `millis()`/`delay()` +
 
 **Upload failures — checklist**
 
-1. Wrong `Tools → Processor` (old vs new bootloader) — "not in sync" errors: toggle between ATmega328P and ATmega328P (Old Bootloader). In PlatformIO: toggle `upload_speed` between 115200 (Optiboot, `board = nanoatmega328p`) and 57600.
+1. Wrong `Tools → Processor` (old vs new bootloader) — "not in sync" errors: toggle between ATmega328P and ATmega328P (Old Bootloader). In PlatformIO: switch the `board` id itself, `nanoatmega328new` (Optiboot, 115200 baud) ↔ `nanoatmega328` (old ATmegaBOOT, 57600 baud) — the upload speed is fixed by each board definition, not a separate setting to tune.
 2. Wrong COM port / missing FTDI or CH340 driver.
 3. Something wired to D0/D1 — disconnect during upload.
 4. Sketch that crashes instantly or blocks interrupts — use ICSP (below) or time the RESET press.
@@ -352,8 +352,9 @@ Timer-to-resource map (for conflict planning): Timer0 → `millis()`/`delay()` +
 **ICSP path (bypasses the bootloader entirely)**
 
 - 6-pin ICSP header (§3.2) + `File → Examples → 11.ArduinoISP` on a second Arduino, or a USBasp/AVR-ISP programmer, or `avrdude` directly.
-- `Tools → Burn Bootloader` both (re)writes the bootloader and sets the fuses (typically LOW=0xFF, HIGH=0xDA, EXT=0x05) — this is also the recovery route for a board whose fuses were bricked or whose bootloader was overwritten.
+- `Tools → Burn Bootloader` both (re)writes the bootloader and sets the fuses (lfuse=0xFF, hfuse=0xDA, efuse=0xFD — see §5) — this is also the recovery route for a board whose fuses were bricked or whose bootloader was overwritten.
 - The ICSP route also works for ATmega168P-era boards and for uploading sketches without any bootloader (gains back the reserved 2 KB).
+- **Optiboot itself is only 512 B** (verified: `optiboot_atmega328.hex` spans exactly 0x7E00–0x7FFF), but the hfuse's BOOTSZ bits reserve the full 2 KB (0x7800–0x7FFF) regardless — the 1.5 KB gap at 0x7800–0x7DFF sits erased and unreachable by the application. Reclaiming it means burning a smaller BOOTSZ setting and re-linking Optiboot at the new offset yourself; neither the Arduino IDE nor `Burn Bootloader` will do this for you, and PlatformIO's `nanoatmega328new` board definition does not expose it. The old ATmegaBOOT (`nanoatmega328`), by contrast, genuinely fills all 2 KB (0x7800–0x7FFF), so there is no equivalent slack to reclaim on that board id.
 
 **Recovery from a "bootloader-looping" board**: burn the bootloader over ICSP (erases the bad sketch, restores fuses/lock bits), then upload normally.
 
@@ -380,5 +381,6 @@ Timer-to-resource map (for conflict planning): Timer0 → `millis()`/`delay()` +
 | Output damages 3.3 V peripheral | GPIO are 5 V push-pull | Level-shift (divider/MOSFET) |
 | Inputs float randomly | Pull-ups off by default (20–50 kΩ available) | `pinMode(pin, INPUT_PULLUP)` or external resistor |
 | ICSP programming fails / wrong pins hit | Header oriented 180° in some diagrams | Locate pin-1 mark (outer edge), MISO/5V row toward the inside |
-| Clone with different fuse set misbehaves at boot | Non-factory fuses (clock source) | Read fuses with `avrdude`, restore L=0xFF H=0xDA E=0x05 via Burn Bootloader |
+| Clone with different fuse set misbehaves at boot | Non-factory fuses (clock source) | Read fuses with `avrdude`, restore L=0xFF H=0xDA E=0xFD via Burn Bootloader |
 | 5 V-only modules get 3.3 V data wrongly read | Nano inputs threshold VIH ≈ 0.6·VCC = 3.0 V | Usually works, but marginal — prefer proper levels |
+| `avrdude` refuses to program: "Expected signature for ATMEGA328P is 1E 95 0F" | Counterfeit/relabeled chip (common on cheap clones) reports a different signature, or wiring/power fault makes ISP read garbage | Re-seat ICSP wiring and check 5 V supply first; if the signature genuinely differs, the chip is not really an ATmega328P — `-F` forces the write but the part may not behave as documented |

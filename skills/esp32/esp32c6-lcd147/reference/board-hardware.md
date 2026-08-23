@@ -428,6 +428,7 @@ the radio off.
 | Deep-sleep current is nowhere near 7 µA | that is the SoC-only figure; LDO quiescent + backlight driver + LED standby add on top | measure the board, do not quote the datasheet |
 | ADC readings drift when Wi-Fi is on | datasheet accuracy figures were taken with Wi-Fi disabled | average more samples, or sample with the radio idle |
 | Attempted pad-JTAG debugging finds nothing | all four JTAG pads are consumed by the SPI bus and card slot | debug over USB-Serial-JTAG on the Type-C port |
+| `openocd -f board/esp32c6-builtin.cfg` (or `pio debug`) fails: "Can't find board/esp32c6-builtin.cfg" | `platform-espressif32` pins `tool-openocd-esp32 ~2.1100.0` (installed: `2.1100.20220706`), which predates ESP32-C6 support — no C6 board or target config ships in that package at all | use a current upstream `openocd-esp32` release, or `idf.py openocd` from an ESP-IDF export'd environment |
 
 ## 15. Sources
 
