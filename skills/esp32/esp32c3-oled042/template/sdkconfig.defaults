@@ -1,0 +1,10 @@
+# The USB-C port is the SoC's built-in USB Serial/JTAG controller. Without
+# this the console goes to UART0 on GPIO20/GPIO21, which are broken out to
+# the headers and connected to nothing -- the monitor stays silent while the
+# firmware runs perfectly.
+CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=y
+
+# ESP-IDF defaults to 2 MB regardless of what the PlatformIO board definition
+# says. The ESP32-C3FH4 here has 4 MB in-package; without this line the
+# partition table is laid out for half the flash you paid for.
+CONFIG_ESPTOOLPY_FLASHSIZE_4MB=y
