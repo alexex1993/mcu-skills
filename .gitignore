@@ -2,3 +2,4 @@
 *.swp
 .pio/
 build/
+.idea
