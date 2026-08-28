@@ -21,6 +21,7 @@ actually works, which HAL call silently does nothing, and how to get a build ont
 | [`nrf52840-promicro`](skills/nrf/nrf52840-promicro) | ProMicro nRF52840 V1940 (nice!nano v2 clone / SuperMini) | nRF52840 QIAA (Cortex-M4F) | PlatformIO + Adafruit nRF52 Arduino |
 | [`atmega328p-nano`](skills/avr/atmega328p-nano) | Arduino Nano (A000005) | ATmega328P (AVR 8-bit) | PlatformIO + Arduino core |
 | [`rp2040-pico`](skills/rp2/rp2040-pico) | Raspberry Pi Pico (SC0915, and Pico H) | RP2040 (2× Cortex-M0+) | PlatformIO + arduino-pico (earlephilhower) |
+| [`rp2350a-weact`](skills/rp2/rp2350a-weact) | WeAct Studio RP2350A Core Board (V1.0 and V2.0) | RP2350A (2× Cortex-M33) | PlatformIO + arduino-pico (earlephilhower) |
 
 The three ESP32-WROOM-32 skills are deliberately separate: the boards share silicon but not
 a header, and the pin map is what a skill is for. Pick by counting pins on one side — 15,
