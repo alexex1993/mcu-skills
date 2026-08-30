@@ -1,3 +1,6 @@
+# Описание на русском языке
+Для рускоязычных пользователей есть статья на [Хабре](https://habr.com/ru/articles/1076082/) по поводу этого репозитория и скиллов в них
+
 # mcu-skills
 
 Claude Code [Agent Skills](https://docs.claude.com/en/docs/claude-code/skills) for embedded
