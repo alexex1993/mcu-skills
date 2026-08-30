@@ -68,10 +68,29 @@ skills/<family>/<skill-name>/     one skill, ready to copy into ~/.claude/skills
   SKILL.md                        frontmatter + the load-bearing knowledge
   reference/                      deep detail, read on demand
   template/                       a project that actually builds
+  assets/                         photos of the board, pinout images
 docs/                             how to author and review a skill
 templates/skill-template/         blank skeleton to start from
 scripts/                          install.sh, validate.sh
 ```
+
+Every skill has an `assets/` directory for pictures of the *physical* board — a top shot, a
+bottom shot with a readable silkscreen, a pinout diagram. Its `IMAGE.md` names the board, so
+photos can be uploaded straight through GitHub's **Add file → Upload files** with no local
+checkout:
+
+```
+skills/rp2/rp2040-pico/assets/
+  IMAGE.md
+  board-top.jpg
+  board-bottom.jpg
+  pinout.png
+```
+
+Reference them from `SKILL.md` or `reference/board-hardware.md` with a relative path,
+`![top](assets/board-top.jpg)` / `![top](../assets/board-top.jpg)`. Keep them small — ~1200 px
+on the long edge; the whole skill directory rides along with every install. Nothing goes in
+`template/`: that is copied into the user's firmware project.
 
 Families: `stm32`, `esp32`, `esp8266`, `rp2`, `nrf`, `avr`, `ch32`, `renesas`, `nxp`, `ti`.
 Add a new directory if yours does not fit — one level, family name only, no vendor nesting.

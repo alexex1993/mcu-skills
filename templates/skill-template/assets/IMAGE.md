@@ -1,0 +1,1 @@
+Photo of <board>:
