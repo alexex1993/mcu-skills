@@ -1,4 +1,4 @@
-Photo of WeAct Studio RP2350A Core Board (V1.0 and V2.0):
+Photo of WeAct Studio RP2350A Core Board (V2.0):
 
 <img width="1280" height="960" alt="image" src="https://github.com/user-attachments/assets/b3b84cc3-8e8a-45be-bb49-882ce5f7499c" />
 
