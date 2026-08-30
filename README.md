@@ -21,6 +21,7 @@ actually works, which HAL call silently does nothing, and how to get a build ont
 | [`esp32-wroom-30pin`](skills/esp32/esp32-wroom-30pin) | 30-pin ESP32 devkit (DOIT V1 / CH340 Type-C) | ESP32-D0WDQ6 (Xtensa LX6) | PlatformIO + ESP-IDF |
 | [`esp32-wroom-36pin`](skills/esp32/esp32-wroom-36pin) | 36-pin ESP32 devkit (original DOIT DevKit V1) | ESP32-D0WDQ6 (Xtensa LX6) | PlatformIO + ESP-IDF |
 | [`esp32-wroom-38pin`](skills/esp32/esp32-wroom-38pin) | 38-pin ESP32 devkit (DevKitC V4 / NodeMCU-32S) | ESP32-D0WDQ6 (Xtensa LX6) | PlatformIO + ESP-IDF |
+| [`esp32s3-cam-40pin`](skills/esp32/esp32s3-cam-40pin) | 40-pin ESP32-S3 CAM board (Freenove FNK0085 / clones) | ESP32-S3-WROOM-1 N8R8/N16R8 (Xtensa LX7) | PlatformIO + Arduino ESP32 core |
 | [`esp8266-nodemcu-30pin`](skills/esp8266/esp8266-nodemcu-30pin) | 30-pin NodeMCU devkit (DevKit V1.0 / Amica, LoLin V3) | ESP8266EX (ESP-12E/F, Tensilica L106) | PlatformIO + Arduino ESP8266 core |
 | [`nrf52840-promicro`](skills/nrf/nrf52840-promicro) | ProMicro nRF52840 V1940 (nice!nano v2 clone / SuperMini) | nRF52840 QIAA (Cortex-M4F) | PlatformIO + Adafruit nRF52 Arduino |
 | [`atmega328p-nano`](skills/avr/atmega328p-nano) | Arduino Nano (A000005) | ATmega328P (AVR 8-bit) | PlatformIO + Arduino core |
@@ -31,6 +32,11 @@ actually works, which HAL call silently does nothing, and how to get a build ont
 `esp8266-nodemcu-30pin` covers both 30-pin NodeMCU revisions — they share the module and
 the pin map, and differ only in USB bridge (CP2102 vs CH340G), board width and two pads.
 Its §"Confirm the board first" has that table.
+
+`esp32s3-cam-40pin` covers the 40-pin ESP32-S3 camera board sold under a dozen names — Freenove
+FNK0085, "ESP32-S3 CAM", "ESP32-S3-WROOM N16R8 CAM" — which all copy one header and one camera
+pin map. It is not the 44-pin DevKitC-1, the XIAO S3 Sense or an ESP32-S3-CAM-LCD board; those use
+incompatible camera pins. Its §"Confirm the board first" has the decision table.
 
 The three ESP32-WROOM-32 skills are deliberately separate: the boards share silicon but not
 a header, and the pin map is what a skill is for. Pick by counting pins on one side — 15,
