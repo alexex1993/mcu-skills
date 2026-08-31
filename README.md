@@ -12,23 +12,23 @@ actually works, which HAL call silently does nothing, and how to get a build ont
 
 ## Skills in this repo
 
-| Skill | Board | MCU | Toolchain |
+| Skill | Board | MCU | Image |
 |---|---|---|---|
-| [`stm32h750-weact`](skills/stm32/stm32h750-weact) | WeAct Studio MiniSTM32H7xx core board | STM32H750VBT6 (Cortex-M7) | PlatformIO + STM32Cube HAL |
-| [`stm32f411-blackpill`](skills/stm32/stm32f411-blackpill) | WeAct Studio "Black Pill" V3.x (and clones) | STM32F411CEU6 (Cortex-M4F) | PlatformIO + STM32Cube HAL |
-| [`esp32c6-lcd147`](skills/esp32/esp32c6-lcd147) | Waveshare ESP32-C6-LCD-1.47 | ESP32-C6FH4 (RISC-V) | PlatformIO + ESP-IDF |
-| [`esp32c3-oled042`](skills/esp32/esp32c3-oled042) | ESP32-C3 0.42" OLED (ABRobot / 01Space) | ESP32-C3FH4 (RISC-V) | PlatformIO + ESP-IDF |
-| [`esp32-wroom-30pin`](skills/esp32/esp32-wroom-30pin) | 30-pin ESP32 devkit (DOIT V1 / CH340 Type-C) | ESP32-D0WDQ6 (Xtensa LX6) | PlatformIO + ESP-IDF |
-| [`esp32-wroom-36pin`](skills/esp32/esp32-wroom-36pin) | 36-pin ESP32 devkit (original DOIT DevKit V1) | ESP32-D0WDQ6 (Xtensa LX6) | PlatformIO + ESP-IDF |
-| [`esp32-wroom-38pin`](skills/esp32/esp32-wroom-38pin) | 38-pin ESP32 devkit (DevKitC V4 / NodeMCU-32S) | ESP32-D0WDQ6 (Xtensa LX6) | PlatformIO + ESP-IDF |
-| [`esp32s3-cam-40pin`](skills/esp32/esp32s3-cam-40pin) | 40-pin ESP32-S3 CAM board (Freenove FNK0085 / clones) | ESP32-S3-WROOM-1 N8R8/N16R8 (Xtensa LX7) | PlatformIO + Arduino ESP32 core |
-| [`esp8266-nodemcu-30pin`](skills/esp8266/esp8266-nodemcu-30pin) | 30-pin NodeMCU devkit (DevKit V1.0 / Amica, LoLin V3) | ESP8266EX (ESP-12E/F, Tensilica L106) | PlatformIO + Arduino ESP8266 core |
-| [`nrf52840-promicro`](skills/nrf/nrf52840-promicro) | ProMicro nRF52840 V1940 (nice!nano v2 clone / SuperMini) | nRF52840 QIAA (Cortex-M4F) | PlatformIO + Adafruit nRF52 Arduino |
-| [`atmega328p-nano`](skills/avr/atmega328p-nano) | Arduino Nano (A000005) | ATmega328P (AVR 8-bit) | PlatformIO + Arduino core |
-| [`atmega32u4-beetle`](skills/avr/atmega32u4-beetle) | Beetle / CJMCU "Mini Arduino Leonardo" | ATmega32U4 (AVR 8-bit, native USB) | PlatformIO + Arduino core |
-| [`lgt8f328p-minievb`](skills/avr/lgt8f328p-minievb) | LGT8F328P-LQFP32 MiniEVB, Nano-style 30-pin (silkscreen `LGTBF32BP`) | LGT8F328P (Logic Green LGT8XM, AVR-compatible) | PlatformIO + lgt8fx core |
-| [`rp2040-pico`](skills/rp2/rp2040-pico) | Raspberry Pi Pico (SC0915, and Pico H) | RP2040 (2× Cortex-M0+) | PlatformIO + arduino-pico (earlephilhower) |
-| [`rp2350a-weact`](skills/rp2/rp2350a-weact) | WeAct Studio RP2350A Core Board (V1.0 and V2.0) | RP2350A (2× Cortex-M33) | PlatformIO + arduino-pico (earlephilhower) |
+| [`stm32h750-weact`](skills/stm32/stm32h750-weact) | WeAct Studio MiniSTM32H7xx core board | STM32H750VBT6 (Cortex-M7) | <img src="https://github.com/user-attachments/assets/096199da-56a0-4aa2-9711-bba7d59dc035" width="120"> |
+| [`stm32f411-blackpill`](skills/stm32/stm32f411-blackpill) | WeAct Studio "Black Pill" V3.x (and clones) | STM32F411CEU6 (Cortex-M4F) | <img src="https://github.com/user-attachments/assets/430196ed-a5b6-4651-b5eb-ee44fcd09235" width="120"> |
+| [`esp32c6-lcd147`](skills/esp32/esp32c6-lcd147) | Waveshare ESP32-C6-LCD-1.47 | ESP32-C6FH4 (RISC-V) | <img src="https://github.com/user-attachments/assets/fa79311c-b137-4550-b5be-d545019ebe28" width="120"> |
+| [`esp32c3-oled042`](skills/esp32/esp32c3-oled042) | ESP32-C3 0.42" OLED (ABRobot / 01Space) | ESP32-C3FH4 (RISC-V) | <img src="https://github.com/user-attachments/assets/06dbaf31-eb85-431a-8bfb-ae2e00d3e5cd" width="120"> |
+| [`esp32-wroom-30pin`](skills/esp32/esp32-wroom-30pin) | 30-pin ESP32 devkit (DOIT V1 / CH340 Type-C) | ESP32-D0WDQ6 (Xtensa LX6) | <img src="https://github.com/user-attachments/assets/57fb4456-8897-47a7-a4ee-1edd831bc15b" width="120"> |
+| [`esp32-wroom-36pin`](skills/esp32/esp32-wroom-36pin) | 36-pin ESP32 devkit (original DOIT DevKit V1) | ESP32-D0WDQ6 (Xtensa LX6) |  |
+| [`esp32-wroom-38pin`](skills/esp32/esp32-wroom-38pin) | 38-pin ESP32 devkit (DevKitC V4 / NodeMCU-32S) | ESP32-D0WDQ6 (Xtensa LX6) | <img src="https://github.com/user-attachments/assets/b4b6fa6f-41f5-4d30-a3bc-1f3bb096aa9d" width="120"> |
+| [`esp32s3-cam-40pin`](skills/esp32/esp32s3-cam-40pin) | 40-pin ESP32-S3 CAM board (Freenove FNK0085 / clones) | ESP32-S3-WROOM-1 N8R8/N16R8 (Xtensa LX7) | <img src="https://github.com/user-attachments/assets/6ce188ac-881b-44df-a7de-2650b5d04740" width="120"> |
+| [`esp8266-nodemcu-30pin`](skills/esp8266/esp8266-nodemcu-30pin) | 30-pin NodeMCU devkit (DevKit V1.0 / Amica, LoLin V3) | ESP8266EX (ESP-12E/F, Tensilica L106) | <img src="https://github.com/user-attachments/assets/8b4c1691-a1ab-4c1f-9c16-42703e76c160" width="120"> |
+| [`nrf52840-promicro`](skills/nrf/nrf52840-promicro) | ProMicro nRF52840 V1940 (nice!nano v2 clone / SuperMini) | nRF52840 QIAA (Cortex-M4F) | <img src="https://github.com/user-attachments/assets/eb74eab1-516c-4b16-b564-58ca096222fc" width="120"> |
+| [`atmega328p-nano`](skills/avr/atmega328p-nano) | Arduino Nano (A000005) | ATmega328P (AVR 8-bit) | <img src="https://github.com/user-attachments/assets/e37f4c59-3746-4603-9f78-65207a957386" width="120"> |
+| [`atmega32u4-beetle`](skills/avr/atmega32u4-beetle) | Beetle / CJMCU "Mini Arduino Leonardo" | ATmega32U4 (AVR 8-bit, native USB) | <img src="https://github.com/user-attachments/assets/35a02767-cf7f-43d3-9ee7-3ae55491f574" width="120"> |
+| [`lgt8f328p-minievb`](skills/avr/lgt8f328p-minievb) | LGT8F328P-LQFP32 MiniEVB, Nano-style 30-pin (silkscreen `LGTBF32BP`) | LGT8F328P (Logic Green LGT8XM, AVR-compatible) |  |
+| [`rp2040-pico`](skills/rp2/rp2040-pico) | Raspberry Pi Pico (SC0915, and Pico H) | RP2040 (2× Cortex-M0+) | <img src="https://github.com/user-attachments/assets/30a66b6a-8052-4b60-8900-98b393099929" width="120"> |
+| [`rp2350a-weact`](skills/rp2/rp2350a-weact) | WeAct Studio RP2350A Core Board (V1.0 and V2.0) | RP2350A (2× Cortex-M33) | <img src="https://github.com/user-attachments/assets/b3b84cc3-8e8a-45be-bb49-882ce5f7499c" width="120"> |
 
 `esp8266-nodemcu-30pin` covers both 30-pin NodeMCU revisions — they share the module and
 the pin map, and differ only in USB bridge (CP2102 vs CH340G), board width and two pads.
