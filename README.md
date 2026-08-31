@@ -29,6 +29,7 @@ actually works, which HAL call silently does nothing, and how to get a build ont
 | [`lgt8f328p-minievb`](skills/avr/lgt8f328p-minievb) | LGT8F328P-LQFP32 MiniEVB, Nano-style 30-pin (silkscreen `LGTBF32BP`) | LGT8F328P (Logic Green LGT8XM, AVR-compatible) | <img src="https://github.com/user-attachments/assets/88178e6d-4657-428b-af61-8f85fe6579d0" width="120"> |
 | [`rp2040-pico`](skills/rp2/rp2040-pico) | Raspberry Pi Pico (SC0915, and Pico H) | RP2040 (2× Cortex-M0+) | <img src="https://github.com/user-attachments/assets/30a66b6a-8052-4b60-8900-98b393099929" width="120"> |
 | [`rp2350a-weact`](skills/rp2/rp2350a-weact) | WeAct Studio RP2350A Core Board (V1.0 and V2.0) | RP2350A (2× Cortex-M33) | <img src="https://github.com/user-attachments/assets/b3b84cc3-8e8a-45be-bb49-882ce5f7499c" width="120"> |
+| [`beu1000-evuba`](skills/baikal/beu1000-evuba) | Baikal Electronics EVU-BA-2.1 | BE-U1000 (3× RISC-V: 2× BR-350, BM-310) |  |
 
 `esp8266-nodemcu-30pin` covers both 30-pin NodeMCU revisions — they share the module and
 the pin map, and differ only in USB bridge (CP2102 vs CH340G), board width and two pads.
@@ -44,6 +45,11 @@ map is a Nano's, but the LGT8F328P is not an ATmega328P: it is a Logic Green LGT
 executes the AVR instruction set inside a different chip. Sketches compile and then behave
 differently — the skill's rules section is mostly that list. It covers the LQFP32 board only;
 its §"Confirm the board first" has the package/variant table for LQFP48 and SSOP20.
+
+`beu1000-evuba` is the one skill here written in Russian: the board's only documentation —
+reference manual, technical specification, board description — is Russian, and so are the register
+and jumper names it has to quote. Its `description:` carries both languages so the skill still
+triggers on English requests.
 
 The three ESP32-WROOM-32 skills are deliberately separate: the boards share silicon but not
 a header, and the pin map is what a skill is for. Pick by counting pins on one side — 15,
@@ -89,7 +95,7 @@ skills/rp2/rp2040-pico/assets/
   IMAGE.md
 ```
 
-Families: `stm32`, `esp32`, `esp8266`, `rp2`, `nrf`, `avr`.
+Families: `stm32`, `esp32`, `esp8266`, `rp2`, `nrf`, `avr`, `baikal`.
 Add a new directory if yours does not fit — one level, family name only, no vendor nesting.
 
 Skill directory name == the `name:` in its frontmatter, and it must be unique across the whole
