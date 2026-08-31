@@ -3,9 +3,13 @@
 
 # mcu-skills
 
-Claude Code [Agent Skills](https://docs.claude.com/en/docs/claude-code/skills) for embedded
-development — one skill per board, holding the board-specific knowledge that is otherwise
-scattered across a datasheet, a reference manual, a schematic and a weekend of debugging.
+[Agent Skills](https://agentskills.io/specification) for embedded development — one skill per
+board, holding the board-specific knowledge that is otherwise scattered across a datasheet,
+a reference manual, a schematic and a weekend of debugging.
+
+Every skill is a directory with a `SKILL.md` in the open Agent Skills format, so they work in
+any agent that supports it — Claude Code, ZCode, OpenCode and the rest — not just one vendor's
+tool.
 
 A good MCU skill answers, without the model guessing: which pin does what, which clock tree
 actually works, which HAL call silently does nothing, and how to get a build onto the chip.
@@ -54,24 +58,40 @@ a header, and the pin map is what a skill is for. Pick by counting pins on one s
 ```sh
 git clone https://github.com/alexex1993/mcu-skills.git
 cd mcu-skills
-./scripts/install.sh stm32h750-weact          # symlink into ~/.claude/skills
-./scripts/install.sh stm32h750-weact --copy   # or copy, if you want to edit locally
+./scripts/install.sh stm32h750-weact                    # Claude Code (default)
+./scripts/install.sh stm32h750-weact --agent zcode      # ZCode
+./scripts/install.sh stm32h750-weact --agent opencode   # OpenCode
+./scripts/install.sh stm32h750-weact --copy             # copy, if you want to edit locally
 ./scripts/install.sh --list
 ```
 
-Then in Claude Code the skill loads by itself when you work on that board, or on demand:
+Add `--project` to install into the current directory instead of your home
+(`./.claude/skills/`, `./.zcode/skills/`, `./.opencode/skills/`). `--dest <dir>` and the
+`SKILLS_DIR` env var install anywhere else; uninstall with `--uninstall <skill-name>` plus
+the same `--agent`/`--dest` flags.
+
+Where each agent keeps its skills:
+
+| Agent | User-level | Project-level |
+|---|---|---|
+| Claude Code | `~/.claude/skills/` | `.claude/skills/` |
+| ZCode | `~/.zcode/skills/` | `.zcode/skills/` |
+| OpenCode | `~/.config/opencode/skills/` | `.opencode/skills/` |
+
+OpenCode also reads `~/.claude/skills/` and `~/.agents/skills/` as-is, so a default install
+works there too. Or skip the script and just copy or symlink a skill directory into the
+right place.
+
+Then the skill loads by itself when you work on that board, or on demand:
 
 ```
 /stm32h750-weact
 ```
 
-Project-scoped install instead of user-scoped: copy the skill directory to `.claude/skills/`
-inside your firmware project.
-
 ## Layout
 
 ```
-skills/<family>/<skill-name>/     one skill, ready to copy into ~/.claude/skills
+skills/<family>/<skill-name>/     one skill, ready to copy into an agent's skills directory
   SKILL.md                        frontmatter + the load-bearing knowledge
   reference/                      deep detail, read on demand
   template/                       a project that actually builds
@@ -93,7 +113,7 @@ Families: `stm32`, `esp32`, `esp8266`, `rp2`, `nrf`, `avr`.
 Add a new directory if yours does not fit — one level, family name only, no vendor nesting.
 
 Skill directory name == the `name:` in its frontmatter, and it must be unique across the whole
-repo: installed skills all land in one flat `~/.claude/skills/` namespace.
+repo: installed skills all land in one flat skills-directory namespace, whatever the agent.
 
 ## Contributing
 
