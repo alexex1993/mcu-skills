@@ -26,6 +26,7 @@ actually works, which HAL call silently does nothing, and how to get a build ont
 | [`nrf52840-promicro`](skills/nrf/nrf52840-promicro) | ProMicro nRF52840 V1940 (nice!nano v2 clone / SuperMini) | nRF52840 QIAA (Cortex-M4F) | PlatformIO + Adafruit nRF52 Arduino |
 | [`atmega328p-nano`](skills/avr/atmega328p-nano) | Arduino Nano (A000005) | ATmega328P (AVR 8-bit) | PlatformIO + Arduino core |
 | [`atmega32u4-beetle`](skills/avr/atmega32u4-beetle) | Beetle / CJMCU "Mini Arduino Leonardo" | ATmega32U4 (AVR 8-bit, native USB) | PlatformIO + Arduino core |
+| [`lgt8f328p-minievb`](skills/avr/lgt8f328p-minievb) | LGT8F328P-LQFP32 MiniEVB, Nano-style 30-pin (silkscreen `LGTBF32BP`) | LGT8F328P (Logic Green LGT8XM, AVR-compatible) | PlatformIO + lgt8fx core |
 | [`rp2040-pico`](skills/rp2/rp2040-pico) | Raspberry Pi Pico (SC0915, and Pico H) | RP2040 (2× Cortex-M0+) | PlatformIO + arduino-pico (earlephilhower) |
 | [`rp2350a-weact`](skills/rp2/rp2350a-weact) | WeAct Studio RP2350A Core Board (V1.0 and V2.0) | RP2350A (2× Cortex-M33) | PlatformIO + arduino-pico (earlephilhower) |
 
@@ -37,6 +38,12 @@ Its §"Confirm the board first" has that table.
 FNK0085, "ESP32-S3 CAM", "ESP32-S3-WROOM N16R8 CAM" — which all copy one header and one camera
 pin map. It is not the 44-pin DevKitC-1, the XIAO S3 Sense or an ESP32-S3-CAM-LCD board; those use
 incompatible camera pins. Its §"Confirm the board first" has the decision table.
+
+`lgt8f328p-minievb` sits in the `avr` family because the toolchain is avr-gcc and the pin
+map is a Nano's, but the LGT8F328P is not an ATmega328P: it is a Logic Green LGT8XM core that
+executes the AVR instruction set inside a different chip. Sketches compile and then behave
+differently — the skill's rules section is mostly that list. It covers the LQFP32 board only;
+its §"Confirm the board first" has the package/variant table for LQFP48 and SSOP20.
 
 The three ESP32-WROOM-32 skills are deliberately separate: the boards share silicon but not
 a header, and the pin map is what a skill is for. Pick by counting pins on one side — 15,
