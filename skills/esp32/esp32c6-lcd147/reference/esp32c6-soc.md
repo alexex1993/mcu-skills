@@ -1235,7 +1235,7 @@ Five modules: PWM timers, PWM operators, capture, fault detection, ETM.
 
 ### 8.11 Remote Control peripheral (RMT)
 
-- **Four channels** for sending and receiving infrared remote-control signals
+- **Four channels** for sending and receiving infrared remote-control signals — **2 TX + 2 RX, fixed direction** (not flexible as on the original ESP32), 48 symbols each
 - Independent TX and RX per channel
 - Modes: **Normal TX/RX, Wrap TX/RX, Continuous TX**
 - **Modulation on TX pulses, demodulation on RX pulses**
@@ -1244,6 +1244,7 @@ Five modules: PWM timers, PWM operators, capture, fault detection, ETM.
 - Clock divider counter, state machine and receiver per RX channel
 - Default RAM-block allocation by channel number
 - RAM holds **16-bit entries with "level" and "period" fields**
+- **No DMA.** Refill is interrupt-driven, so radio activity can stretch a WS2812 bit past its timing window — the symptom is an intermittently wrong-coloured LED under network load. Only the S3 and P4 have RMT DMA
 
 ### 8.12 Parallel IO controller (PARLIO)
 

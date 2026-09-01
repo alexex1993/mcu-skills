@@ -27,6 +27,10 @@ read the reference files rather than guessing.
 - `reference/esp32c3-soc.md` — the ESP32-C3 datasheet digest, for chip-level
   questions: pin and IO MUX tables, analog functions, boot straps, memory,
   every peripheral's limits, electrical characteristics, current consumption.
+- `reference/esp32-family.md` — the rest of the family, for "should this be a different
+  ESP32?" questions: what does and does not port between chips, radio and USB capability
+  per chip, the RMT generation table (WS2812 under Wi-Fi load), deep-sleep memory and
+  ULP/LP-core availability, and a chip-selection table.
 - `template/` — a **project that builds clean**, in two variants, plus a
   scaffold script. See `template/README.md`.
 

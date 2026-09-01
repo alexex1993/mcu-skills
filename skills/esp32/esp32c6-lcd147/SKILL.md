@@ -20,6 +20,10 @@ reference file rather than guessing.
 - `reference/esp32c6-soc.md` — the ESP32-C6 silicon datasheet digest, for chip-level
   questions: IO MUX and LP IO tables, boot straps, memory, every peripheral's feature
   list, electrical and RF characteristics.
+- `reference/esp32-family.md` — the rest of the family, for "should this be a different
+  ESP32?" questions: what does and does not port between chips, radio and USB capability
+  per chip, the RMT generation table (WS2812 under Wi-Fi load), deep-sleep memory and
+  ULP/LP-core availability, and a chip-selection table.
 - `template/` — a **project that builds clean**, in two variants, plus a scaffold
   script. See `template/README.md`.
 

@@ -55,6 +55,13 @@ The three ESP32-WROOM-32 skills are deliberately separate: the boards share sili
 a header, and the pin map is what a skill is for. Pick by counting pins on one side — 15,
 18 or 19. `esp32-wroom-36pin` §"Confirm the board first" has the decision table.
 
+All six `esp32` skills also carry `reference/esp32-family.md`, a cross-chip file for the
+"should this be a different ESP32?" question — what does and does not port between chips,
+radio and USB capability per chip, the RMT generation table, deep-sleep memory and ULP/LP
+core availability, and a chip-selection table. It is the only file in the repo that talks
+about chips no skill covers (S2, C2, C5, C61, H2, H4, P4), and it says so rather than
+letting the model reason from the nearest board.
+
 ## Install
 
 ```sh
@@ -115,3 +122,8 @@ the model gets it right without help, leave it out. Everything that cost you an 
 
 MIT — see [LICENSE](LICENSE). Vendored third-party code inside a skill's `template/lib/` keeps
 its own license; note it in that skill's README.
+
+The cross-chip comparison material in `skills/esp32/*/reference/esp32-family.md` is adapted
+from [ESP32Features](https://github.com/artkeller/ESP32Features) by artkeller, used under
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Attribution is carried in §11 of
+that file.

@@ -154,11 +154,11 @@ parallel LCD.
 | I2C | 2 | fully matrix-routed, no IO_MUX advantage, up to 800 kHz |
 | SPI | SPI2 (FSPI) + SPI3 | SPI2's IO_MUX pads are GPIO9-14 — all camera pins on this board |
 | I2S | 2 | PDM and TDM, used for microphones |
-| RMT | 4 TX + 4 RX | the WS2812 route; `neopixelWrite()` uses it |
+| RMT | 4 TX + 4 RX | 48 symbols per channel. **The S3 is the only Xtensa chip with RMT DMA** — that is what keeps a long WS2812 chain from glitching while Wi-Fi runs |
 | LEDC | 8 channels, 4 timers | **channel 0 / timer 0 is the camera's XCLK** |
 | PCNT | 4 units | |
 | TWAI | 1 | CAN 2.0 |
-| USB | OTG 1.1 FS **and** Serial/JTAG, on GPIO19/20 | one at a time |
+| USB | OTG 1.1 **full speed** (12 Mbit/s) **and** Serial/JTAG, on GPIO19/20 | one at a time. 12 Mbit/s is ~600–900 kB/s in practice — that, not the sensor, is the ceiling on streaming frames out over USB. High speed needs an ESP32-P4 |
 | SDMMC | 1 host, 2 slots | fully matrix-routed on the S3 — any pins, 1-bit or 4-bit |
 | Timers | 4 × 54-bit + 3 watchdogs | |
 

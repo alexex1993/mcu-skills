@@ -22,6 +22,10 @@ Read `reference/board-hardware.md` before choosing pins.
 - `reference/esp32-soc.md` — the silicon: pins that do not exist, strapping semantics and
   the `GPIO_STRAP_REG` bit order, ADC/DAC/touch maps and accuracy, IO_MUX vs GPIO Matrix
   and the SPI speed rule, power modes, memory map, deep-sleep wake pins.
+- `reference/esp32-family.md` — the rest of the family, for "should this be a different
+  ESP32?" questions: what does and does not port between chips, radio and USB capability
+  per chip, the RMT generation table (WS2812 under Wi-Fi load), deep-sleep memory and
+  ULP/LP-core availability, and a chip-selection table.
 - `reference/recipes.md` — code that compiles: `platformio.ini`, `sdkconfig.defaults`,
   ADC1 with calibration, LEDC LED and servo, debounced input, the new I2C master driver,
   80 MHz SPI, UART2, Wi-Fi scan and station connect, NVS, deep sleep, RMT WS2812.

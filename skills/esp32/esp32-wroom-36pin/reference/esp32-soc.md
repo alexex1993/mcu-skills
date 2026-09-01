@@ -259,7 +259,7 @@ no speed penalty that matters at their frequencies.
 | I2S | 2, with an APLL for exact audio rates |
 | LEDC | 16 channels: **8 high-speed + 8 low-speed**, 4 timers each. Only low-speed channels can keep running in light sleep |
 | MCPWM | 2 units, 3 pairs each — the one for motor bridges with dead-time |
-| RMT | 8 channels — IR, WS2812, any precise pulse train |
+| RMT | 8 channels, **flexible** — any channel is TX or RX, 64 symbols each. No DMA; the receiver stops when its buffer fills (RMT v1). See `esp32-family.md` §6 for why this is the chip where long WS2812 chains glitch under Wi-Fi load |
 | PCNT | 8 units, quadrature-capable |
 | TWAI (CAN) | 1, ISO 11898-1, needs an external transceiver |
 | SDMMC host | 1, 1/4/8-bit — collides with the JTAG/strapping group |

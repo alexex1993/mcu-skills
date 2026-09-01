@@ -22,6 +22,10 @@ failure — "the camera does not initialise" — is almost never the camera.
 - `reference/esp32s3-soc.md` — the silicon: which GPIOs do not exist, strapping semantics
   from the datasheet's own tables, ADC1/ADC2 and touch maps, the LCD_CAM DVP controller,
   power-up glitches, memory map and PSRAM addressing, deep sleep and RTC wake pins.
+- `reference/esp32-family.md` — the rest of the family, for "should this be a different
+  ESP32?" questions: what does and does not port between chips, radio and USB capability
+  per chip, the RMT generation table (WS2812 under Wi-Fi load), deep-sleep memory and
+  ULP/LP-core availability, and a chip-selection table.
 - `reference/recipes.md` — code that compiles: `platformio.ini`, camera init and capture,
   SDMMC, camera → SD, an MJPEG web server, moving the console to native USB, I2C and SPI
   on the pins that are actually free, ADC, WS2812, deep sleep.

@@ -388,8 +388,16 @@ crystal clock source, runs in Light-sleep, hardware duty fade.
 
 ### RMT
 
-Two TX and two RX channels sharing a 192 × 32-bit RAM block. The standard way
-to drive WS2812-family LEDs.
+Two TX and two RX channels sharing a 192 × 32-bit RAM block — **48 symbols per
+channel**, and the direction is fixed per channel, not selectable as it is on the
+original ESP32. The standard way to drive WS2812-family LEDs.
+
+**No DMA on the C3.** The driver refills the channel from an interrupt, so a Wi-Fi
+or BLE interrupt arriving mid-frame can stretch a bit past the WS2812's timing
+window. The symptom is one intermittently wrong-coloured LED under network load,
+and it gets worse with chain length: 48 symbols is 24 bits, so a 20-LED strip
+refills ~20 times per frame. Only the ESP32-S3 and P4 have RMT DMA; on this chip
+the fix for a long chain is the SPI-based driver, not more RMT tuning.
 
 ### SAR ADC
 
