@@ -27,6 +27,16 @@ reference file rather than guessing.
 - `template/` — a **project that builds clean**, in two variants, plus a scaffold
   script. See `template/README.md`.
 
+## Confirm the board first
+
+Waveshare also sells the **ESP32-C6-Touch-LCD-1.47** — same vendor, same 1.47" 172×320
+panel, different board. If the screen responds to a finger, or there is no WS2812 next to
+the panel, it is that one: a JD9853 controller instead of the ST7789, an 8 MB C6FH8
+instead of the 4 MB C6FH4, a 22-pin header instead of 18, and a pin map in which only
+`LCD_CS`, `LCD_DC` and `TF_CS` match this board's. Use the `esp32c6-touch-lcd147` skill
+and do not port pin numbers between them — the wrong map gives a dark screen, not an
+error.
+
 ## Orientation
 
 | | |

@@ -27,6 +27,7 @@ than an Espressif datasheet it is marked **⚠︎ second-hand** and should be ch
 | ESP32-D0WDQ6 / D0WD-V3 | `esp32-wroom-30pin`, `-36pin`, `-38pin` | WROOM-32 devkits |
 | ESP32-C3FH4 | `esp32c3-oled042` | ESP32-C3 0.42" OLED |
 | ESP32-C6FH4 | `esp32c6-lcd147` | Waveshare ESP32-C6-LCD-1.47 |
+| ESP32-C6FH8 | `esp32c6-touch-lcd147` | Waveshare ESP32-C6-Touch-LCD-1.47 |
 | ESP32-S3-WROOM-1 | `esp32s3-cam-40pin` | 40-pin ESP32-S3 CAM |
 
 **No skill exists for ESP32-S2, C2, C5, C61, H2, H4 or P4.** If the work is on one of

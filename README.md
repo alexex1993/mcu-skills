@@ -17,6 +17,7 @@ actually works, which HAL call silently does nothing, and how to get a build ont
 | [`stm32h750-weact`](skills/stm32/stm32h750-weact) | WeAct Studio MiniSTM32H7xx core board | STM32H750VBT6 (Cortex-M7) | <img src="https://github.com/user-attachments/assets/096199da-56a0-4aa2-9711-bba7d59dc035" width="120"> |
 | [`stm32f411-blackpill`](skills/stm32/stm32f411-blackpill) | WeAct Studio "Black Pill" V3.x (and clones) | STM32F411CEU6 (Cortex-M4F) | <img src="https://github.com/user-attachments/assets/430196ed-a5b6-4651-b5eb-ee44fcd09235" width="120"> |
 | [`esp32c6-lcd147`](skills/esp32/esp32c6-lcd147) | Waveshare ESP32-C6-LCD-1.47 | ESP32-C6FH4 (RISC-V) | <img src="https://github.com/user-attachments/assets/fa79311c-b137-4550-b5be-d545019ebe28" width="120"> |
+| [`esp32c6-touch-lcd147`](skills/esp32/esp32c6-touch-lcd147) | Waveshare ESP32-C6-Touch-LCD-1.47 | ESP32-C6FH8 (RISC-V) |  |
 | [`esp32c3-oled042`](skills/esp32/esp32c3-oled042) | ESP32-C3 0.42" OLED (ABRobot / 01Space) | ESP32-C3FH4 (RISC-V) | <img src="https://github.com/user-attachments/assets/06dbaf31-eb85-431a-8bfb-ae2e00d3e5cd" width="120"> |
 | [`esp32-wroom-30pin`](skills/esp32/esp32-wroom-30pin) | 30-pin ESP32 devkit (DOIT V1 / CH340 Type-C) | ESP32-D0WDQ6 (Xtensa LX6) | <img src="https://github.com/user-attachments/assets/57fb4456-8897-47a7-a4ee-1edd831bc15b" width="120"> |
 | [`esp32-wroom-36pin`](skills/esp32/esp32-wroom-36pin) | 36-pin ESP32 devkit (original DOIT DevKit V1) | ESP32-D0WDQ6 (Xtensa LX6) |  |
@@ -40,6 +41,14 @@ FNK0085, "ESP32-S3 CAM", "ESP32-S3-WROOM N16R8 CAM" — which all copy one heade
 pin map. It is not the 44-pin DevKitC-1, the XIAO S3 Sense or an ESP32-S3-CAM-LCD board; those use
 incompatible camera pins. Its §"Confirm the board first" has the decision table.
 
+`esp32c6-touch-lcd147` and `esp32c6-lcd147` are two different boards, not two revisions
+of one. They share a vendor, a chip family and a 172x320 1.47" panel, and almost nothing
+else: different SoC variant (C6FH8/8 MB vs C6FH4/4 MB), different panel controller (JD9853
+vs ST7789), and a pin map in which only `LCD_CS`, `LCD_DC` and `TF_CS` land on the same
+GPIOs. Porting pin numbers between them produces a dark screen rather than an error, so
+each skill opens with a "Confirm the board first" table; the touch one's
+§"Differences from the non-touch ESP32-C6-LCD-1.47" is the full diff.
+
 `lgt8f328p-minievb` sits in the `avr` family because the toolchain is avr-gcc and the pin
 map is a Nano's, but the LGT8F328P is not an ATmega328P: it is a Logic Green LGT8XM core that
 executes the AVR instruction set inside a different chip. Sketches compile and then behave
@@ -55,7 +64,7 @@ The three ESP32-WROOM-32 skills are deliberately separate: the boards share sili
 a header, and the pin map is what a skill is for. Pick by counting pins on one side — 15,
 18 or 19. `esp32-wroom-36pin` §"Confirm the board first" has the decision table.
 
-All six `esp32` skills also carry `reference/esp32-family.md`, a cross-chip file for the
+All seven `esp32` skills also carry `reference/esp32-family.md`, a cross-chip file for the
 "should this be a different ESP32?" question — what does and does not port between chips,
 radio and USB capability per chip, the RMT generation table, deep-sleep memory and ULP/LP
 core availability, and a chip-selection table. It is the only file in the repo that talks
