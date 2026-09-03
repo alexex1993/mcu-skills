@@ -357,6 +357,42 @@ Redrawing less is what actually buys speed. `flush_rect()` takes a rectangle:
 repaints one text band. Coordinates are `(x_start, y_start, x_end, y_end)` with the end
 exclusive, and the source buffer's stride must equal the rectangle width.
 
+**The wire is not the whole cost.** Every `esp_lcd_panel_draw_bitmap()` pays a fixed toll
+on top of its pixels — `CASET`, `RASET`, `RAMWR` and the DMA round trip — of roughly
+**450 µs**. ✅ The toll is real and large: it was measured on a board (ESP-IDF 6.1.0,
+40 MHz, `esp_lcd_panel_io_spi` with `trans_queue_depth = 1` and an `on_color_trans_done`
+semaphore). ⚠︎ The 450 µs figure itself is **derived from whole-frame timings, not from
+timing one call in isolation** — treat it as the right order of magnitude, and as a
+number that predicted frame times well enough to schedule against.
+
+| Rectangle | Pixels on the wire | + the call | Total |
+|---|---|---|---|
+| 14 × 14 cell | 78 µs | 450 µs | **~0.53 ms** |
+| 56 × 14, four cells | 314 µs | 450 µs | ~0.76 ms |
+| 140 × 14, a full row | 784 µs | 450 µs | ~1.2 ms |
+| 172 × 320, full screen | 22.0 ms | 450 µs | ~22.5 ms |
+
+Pixel arithmetic alone therefore **under-predicts small rectangles by 2–6×**, and two
+rules fall out of that:
+
+- **Merge before you split.** 450 µs buys about six 14 × 14 cells, so one rectangle
+  spanning a gap beats two rectangles either side of it whenever the gap is under about
+  six cells. Repainting a whole changed row in one call is nearly always cheaper than
+  repainting the two changed pieces of it.
+- **Budget the frame; do not repaint on demand.** A 60 fps frame is 16.7 ms, and a
+  10 × 20 matrix of 14 px cells is 15.7 ms of pure wire time, so a full repaint can never
+  fit in one frame however it is sliced. Spend a fixed budget per frame, counted in
+  cell-equivalents with every call charged its ~6 cells, and leave the remainder marked
+  dirty for the next frame — resuming where you stopped so no region starves.
+
+✅ Measured on a 60 fps Tetris build (10 × 20 matrix, 14 px cells) driven by an autoplay
+that hard-dropped a piece three times a second: at a budget of 130 cell-equivalents the
+worst frame was 19 ms and the loop lost a frame here and there; at **105** the worst frame
+was 15 ms and 97.5 % of frames came in under 12 ms, holding a steady 60 fps.
+
+Genuinely full-screen repaints cannot be made to fit — a screen change is 22 ms whatever
+you do. Budget those as a deliberate dropped frame, not as something to optimise away.
+
 Keep per-pixel loops integer-only: the RISC-V core here has **no FPU**. Float belongs in
 one-time init paths, never in a redraw.
 
@@ -397,17 +433,40 @@ Arduino is also viable (Waveshare ships an AXS5106L Arduino library and Arduino_
 supports the panel as an ST7789 with a 34-column offset), but everything in this skill is
 ESP-IDF.
 
+✅ **Set `PROJECT_VER` before `project()`.** ESP-IDF otherwise derives the version with
+`git describe`, which fails outright in a repository that has no commits yet — a brand new
+`git init` is the common case for a fresh project. The build stops during configuration
+with `fatal: not a git repository` and a CMake error about a missing `head-ref` file, in a
+directory that plainly *is* a repository, which sends you looking in the wrong place. The
+template's `CMakeLists.txt` carries the fix:
+
+```cmake
+cmake_minimum_required(VERSION 3.16.0)
+set(PROJECT_VER "1.0.0")          # before project(): skips git describe
+include($ENV{IDF_PATH}/tools/cmake/project.cmake)
+project(my-project)
+```
+
 ## 11. sdkconfig essentials
 
 ```ini
 CONFIG_ESPTOOLPY_FLASHSIZE_8MB=y      # ESP32-C6FH8
 CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=y  # console on the Type-C port, not UART0
 CONFIG_ESP_MAIN_TASK_STACK_SIZE=8192
+CONFIG_FREERTOS_HZ=1000               # only if you pace frames -- see below
 ```
 
 The console line is the one that costs an afternoon. Without it `printf` and `ESP_LOG`
 go to UART0 on GPIO16/17, which only reach the header — the monitor is silent while the
 firmware runs perfectly.
+
+**`CONFIG_FREERTOS_HZ` defaults to 100**, so the shortest `vTaskDelay()` is 10 ms. Any
+loop that paces itself on a frame period — 16.7 ms for 60 fps, 33.3 ms for 30 — cannot be
+held at that granularity: the sleep quantises to 10 or 20 ms and the rate lands wherever
+the rounding puts it, with no error and nothing to debug. ✅ 1 kHz gives a 1 ms quantum
+and holds 60 fps; pace against `esp_timer_get_time()` and use the tick only to sleep. Do
+not raise it if nothing in the project needs sub-10 ms sleeps — the tick interrupt is not
+free.
 
 ## 12. Flashing, monitoring, recovery
 
@@ -486,6 +545,9 @@ Code lives in [recipes.md](recipes.md). What is where:
 | Panel glows garbage for a moment at power-on | GPIO23's reset pull-up biases the backlight transistor on | claim GPIO23 at 0 % duty first (§3) |
 | Image links fine, board does not boot | app exceeded the 1 MB default partition | custom `partitions.csv` (§8) |
 | `analogRead`-style code finds no free ADC pin | all seven ADC channels are used (§5.1) | give up the IMU interrupts or the card slot |
+| `pio run` fails to configure: `fatal: not a git repository` in a directory that *is* one | ESP-IDF ran `git describe` for the version; the repo has no commits yet | `set(PROJECT_VER "1.0.0")` before `project()` (§10) |
+| A loop paced for 60 fps settles at 50, or the rate jumps between values | `CONFIG_FREERTOS_HZ` is 100, so the shortest sleep is 10 ms | `CONFIG_FREERTOS_HZ=1000` (§11) |
+| Frame time spikes when many small rectangles are pushed, though few pixels moved | ~450 µs fixed cost per `draw_bitmap`, independent of size | merge rectangles, budget per frame (§9.5) |
 
 ## 15. Differences from the non-touch ESP32-C6-LCD-1.47
 

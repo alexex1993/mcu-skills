@@ -9,3 +9,11 @@ CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=y
 # app_main draws the whole scene from the stack-side tile canvas; 8 KB is not
 # enough once the calibration flow is in the picture.
 CONFIG_ESP_MAIN_TASK_STACK_SIZE=8192
+
+# Uncomment if the app paces itself on a frame period. CONFIG_FREERTOS_HZ
+# defaults to 100, so the shortest vTaskDelay() is 10 ms and a 16.7 ms (60 fps)
+# frame cannot be held: the sleep quantises and the rate lands wherever the
+# rounding puts it, with no error to see. 1 kHz gives a 1 ms quantum. Left off
+# by default because the tick interrupt is not free and this template does not
+# need it.
+#CONFIG_FREERTOS_HZ=1000

@@ -168,9 +168,26 @@ What actually buys speed, in order of payoff:
 1. **Redraw less.** `esp_lcd_panel_draw_bitmap()` takes a rectangle; the end coordinates
    are exclusive and the source stride must equal the rectangle width. A 172 × 40 status
    strip is 2.75 ms instead of 22 ms.
-2. **Double-buffer**, if you are keeping framebuffers at all — 110 KB each out of
+2. **Redraw in fewer calls.** Pixel arithmetic is only half the cost: each
+   `draw_bitmap()` pays about **450 µs** of address commands and DMA round trip on top of
+   its pixels, so a 14 × 14 tile costs 0.53 ms of which 78 µs is the wire. The toll is
+   worth about six such tiles, so merging two nearby rectangles into one beats splitting
+   them. Once you are pushing dozens of small rectangles a frame, this — not the wire — is
+   what you are fighting. `board-hardware.md` §9.5 has the table and the frame-budget rule.
+3. **Double-buffer**, if you are keeping framebuffers at all — 110 KB each out of
    327,680 B. It overlaps CPU and DMA but does not raise the 45 fps ceiling.
-3. Nothing else. Do not go looking for a faster clock (rule 12).
+4. Nothing else. Do not go looking for a faster clock (rule 12).
+
+**Above 45 fps, budget the frame rather than repainting on demand.** A full 172 × 320
+repaint never fits in a 16.7 ms frame, so spend a fixed allowance per frame — counted in
+tile-equivalents, with each `draw_bitmap()` charged its ~6 tiles — and leave the rest
+dirty for the next frame, resuming where you stopped. ✅ A 60 fps game with a 10 × 20
+matrix of 14 px cells holds a steady 60 with a worst frame of 15 ms this way; the same
+code repainting on demand dropped to 59 with 19 ms spikes.
+
+**If you pace frames, set `CONFIG_FREERTOS_HZ=1000`.** The default is 100, so the shortest
+`vTaskDelay()` is 10 ms and a 16.7 ms frame period cannot be held — the rate quietly lands
+wherever the rounding puts it. Pace against `esp_timer_get_time()`, sleep on the tick.
 
 Keep per-pixel loops integer-only: this RISC-V core has **no FPU**. Float belongs in
 one-time init paths, never in a redraw.
@@ -246,6 +263,14 @@ Say what is verified on hardware and what is derived.
 renderer), the AXS5106L touch path (14-byte frame, no repeated START, 200/300 ms reset,
 presence by ACK, the mirror-X mapping) and the three-point calibration, the LEDC
 backlight at 90 %, the USB console, and both template variants building on ESP-IDF 6.1.0.
+
+Also on a real board, from a 60 fps game built on this template: **a per-frame redraw
+budget holds 60 fps** where repainting on demand does not (§9.5 has the numbers), the
+`git describe` / `PROJECT_VER` build failure and its fix, and the `CONFIG_FREERTOS_HZ`
+sleep quantum. ⚠︎ Within that, the **450 µs per `draw_bitmap`** figure is derived from
+whole-frame timings rather than from timing a call in isolation — the fixed cost is
+certainly there and certainly dominates small rectangles, but quote the number as an
+order of magnitude, not a measurement.
 
 **⚠︎ Schematic- or datasheet-derived, never exercised:** the **BOOT = GPIO9** correction
 (netlist, unambiguous, but the template's calibration hatch has not been re-tested on
