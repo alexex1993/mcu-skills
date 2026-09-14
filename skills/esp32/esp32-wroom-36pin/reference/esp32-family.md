@@ -30,8 +30,9 @@ than an Espressif datasheet it is marked **⚠︎ second-hand** and should be ch
 | ESP32-C6FH8 | `esp32c6-touch-lcd147` | Waveshare ESP32-C6-Touch-LCD-1.47 |
 | ESP32-S3-WROOM-1 | `esp32s3-cam-40pin` | 40-pin ESP32-S3 CAM |
 | ESP32-S3-WROOM-1-N16R8 | `esp32s3-rlcd42` | Waveshare ESP32-S3-RLCD-4.2 |
+| ESP32-P4NRW32 (+ ESP32-C6) | `esp32p4-jc-m3-dev` | Guition JC-ESP32P4-M3-DEV |
 
-**No skill exists for ESP32-S2, C2, C5, C61, H2, H4 or P4.** If the work is on one of
+**No skill exists for ESP32-S2, C2, C5, C61, H2 or H4.** If the work is on one of
 those, say so rather than reasoning from the closest skill — §2 and §9 say how far each
 one's knowledge actually carries.
 
@@ -90,10 +91,12 @@ Three entries in that table are the ones people get wrong:
   connectivity pairs it with a second chip (usually a C6 over SDIO or SPI, running
   `esp_hosted`).
 
-⚠︎ **second-hand** — the S2, C2, C5, C61, H2, H4 and P4 rows are compiled from Espressif's
+⚠︎ **second-hand** — the S2, C2, C5, C61, H2 and H4 rows are compiled from Espressif's
 product selector via the source in §11, not from a datasheet read for this repo. Treat the
 memory-combo numbers as approximate and confirm the exact part-number suffix before
-ordering; the *presence or absence* of a radio is safe.
+ordering; the *presence or absence* of a radio is safe. The **P4** row is first-hand: it
+comes from the datasheet read for `esp32p4-jc-m3-dev`, whose `esp32p4-soc.md` has the
+detail.
 
 Announced but with **no publicly indexed series datasheet**, so not usable as a design
 assumption: ESP32-E22 (a Wi-Fi 6E radio co-processor), ESP32-H21 (BLE + 802.15.4,

@@ -1,0 +1,26 @@
+# --- Silicon revision. Critical on this board. ---
+# Boards sold as "P4_V1.3" carry ESP32-P4 rev v1.3 (esptool prints
+# "revision v1.3", ROM esp32p4-eco2).  ESP-IDF 5.5 defaults to building for
+# rev >= 3.1, and components/esp_hw_support/port/esp32p4/Kconfig.hw_support
+# states plainly: "Support of ESP32-P4 rev. <3.0 and >=3.0 is mutually
+# exclusive" — they are different hardware, not a version bump.
+# Without these two lines the second-stage bootloader dies immediately after
+# the "entry 0x..." line with "Guru Meditation Error: Illegal instruction".
+# On a rev >= 3.0 board delete both and use CONFIG_ESP32P4_REV_MIN_301=y.
+CONFIG_ESP32P4_SELECTS_REV_LESS_V3=y
+CONFIG_ESP32P4_REV_MIN_100=y
+
+# --- 16 MB flash ---
+CONFIG_ESPTOOLPY_FLASHSIZE_16MB=y
+# Duplicate of board_build.partitions in platformio.ini: PlatformIO builds the
+# image from the CSV named there, this option keeps the IDF config consistent.
+CONFIG_PARTITION_TABLE_SINGLE_APP_LARGE=y
+
+# --- Console on the native USB-Serial/JTAG (the 303A:1001 socket) ---
+CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=y
+
+# --- 32 MB in-package PSRAM ---
+# HEX (16-line) mode and 200 MHz are the P4 defaults; 250 MHz needs rev >= 3.0.
+CONFIG_SPIRAM=y
+CONFIG_SPIRAM_MODE_HEX=y
+CONFIG_SPIRAM_SPEED_200M=y

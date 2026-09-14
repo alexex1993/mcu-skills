@@ -24,6 +24,7 @@ actually works, which HAL call silently does nothing, and how to get a build ont
 | [`esp32-wroom-38pin`](skills/esp32/esp32-wroom-38pin) | 38-pin ESP32 devkit (DevKitC V4 / NodeMCU-32S) | ESP32-D0WDQ6 (Xtensa LX6) | <img src="https://github.com/user-attachments/assets/b4b6fa6f-41f5-4d30-a3bc-1f3bb096aa9d" width="120"> |
 | [`esp32s3-cam-40pin`](skills/esp32/esp32s3-cam-40pin) | 40-pin ESP32-S3 CAM board (Freenove FNK0085 / clones) | ESP32-S3-WROOM-1 N8R8/N16R8 (Xtensa LX7) | <img src="https://github.com/user-attachments/assets/6ce188ac-881b-44df-a7de-2650b5d04740" width="120"> |
 | [`esp32s3-rlcd42`](skills/esp32/esp32s3-rlcd42) | Waveshare ESP32-S3-RLCD-4.2 (SKU 33298 / 33507) | ESP32-S3-WROOM-1-N16R8 (Xtensa LX7) |  |
+| [`esp32p4-jc-m3-dev`](skills/esp32/esp32p4-jc-m3-dev) | Guition JC-ESP32P4-M3-DEV | ESP32-P4NRW32 (2× RISC-V) + ESP32-C6 |  |
 | [`esp8266-nodemcu-30pin`](skills/esp8266/esp8266-nodemcu-30pin) | 30-pin NodeMCU devkit (DevKit V1.0 / Amica, LoLin V3) | ESP8266EX (ESP-12E/F, Tensilica L106) | <img src="https://github.com/user-attachments/assets/8b4c1691-a1ab-4c1f-9c16-42703e76c160" width="120"> |
 | [`nrf52840-promicro`](skills/nrf/nrf52840-promicro) | ProMicro nRF52840 V1940 (nice!nano v2 clone / SuperMini) | nRF52840 QIAA (Cortex-M4F) | <img src="https://github.com/user-attachments/assets/eb74eab1-516c-4b16-b564-58ca096222fc" width="120"> |
 | [`atmega328p-nano`](skills/avr/atmega328p-nano) | Arduino Nano (A000005) | ATmega328P (AVR 8-bit) | <img src="https://github.com/user-attachments/assets/e37f4c59-3746-4603-9f78-65207a957386" width="120"> |
@@ -71,15 +72,27 @@ TF slot is on SDMMC rather than SPI. The skill transcribes the table and then co
 against the schematic in §"Rules" and `reference/board-hardware.md` §2.2, because copying
 it verbatim is the most likely way to get this board wrong.
 
+`esp32p4-jc-m3-dev` is the first skill here for a chip with **no radio of its own**. The
+ESP32-P4 is an application processor; the Wi-Fi 6 and Bluetooth on this board come from an
+ESP32-C6 sitting inside the same module, reachable only over SDIO through
+`esp_hosted`, so `esp_wifi_init()` failing is usually a transport problem rather than a
+Wi-Fi one. Two further things separate it from every other board in this repo. The P4 comes
+in **two mutually incompatible silicon revisions** — Guition ships two complete copies of
+every demo, `P4_V1.3` and `P4_V3X`, and ESP-IDF 5.5 defaults to the wrong one for the
+boards being sold; the symptom is a bootloader that dies with `Illegal instruction`
+straight after `entry 0x...`. And the **official PlatformIO platform cannot build for the
+P4 at all**, at any version, so the skill's `platformio.ini` pins the pioarduino fork by
+URL. Its §"Rules" opens with both.
+
 The three ESP32-WROOM-32 skills are deliberately separate: the boards share silicon but not
 a header, and the pin map is what a skill is for. Pick by counting pins on one side — 15,
 18 or 19. `esp32-wroom-36pin` §"Confirm the board first" has the decision table.
 
-All eight `esp32` skills also carry `reference/esp32-family.md`, a cross-chip file for the
+All nine `esp32` skills also carry `reference/esp32-family.md`, a cross-chip file for the
 "should this be a different ESP32?" question — what does and does not port between chips,
 radio and USB capability per chip, the RMT generation table, deep-sleep memory and ULP/LP
 core availability, and a chip-selection table. It is the only file in the repo that talks
-about chips no skill covers (S2, C2, C5, C61, H2, H4, P4), and it says so rather than
+about chips no skill covers (S2, C2, C5, C61, H2, H4), and it says so rather than
 letting the model reason from the nearest board.
 
 ## Install
