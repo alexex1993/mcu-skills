@@ -10,7 +10,7 @@ has the same board; if not, the hardware-verification notes carry the PR.
 - [ ] the name is unique across the repo (all skills share one flat namespace once installed)
 - [ ] one skill per PR
 - [ ] README table has a new row
-- [ ] `.claude-plugin/marketplace.json` has a new plugin entry (`source` = the skill directory)
+- [ ] `.claude-plugin/marketplace.json` has a new plugin entry (`"source": "./"`, `"skills": ["./skills/<family>/<skill-name>"]`)
 - [ ] no absolute paths (`/Users/…`, `/home/…`, `C:\…`), no `.DS_Store`, no build output
       (`.pio/`, `build/`, `*.elf`, `*.bin`), no IDE directories
 - [ ] vendored third-party code keeps its license header and is listed in `template/README.md`
