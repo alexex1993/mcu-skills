@@ -41,9 +41,10 @@ actually works, which HAL call silently does nothing, and how to get a build ont
 ```sh
 git clone https://github.com/alexex1993/mcu-skills.git
 cd mcu-skills
+./scripts/install.sh --list
 ./scripts/install.sh stm32h750-weact          # symlink into ~/.claude/skills
 ./scripts/install.sh stm32h750-weact --copy   # or copy, if you want to edit locally
-./scripts/install.sh --list
+./scripts/install.sh --list                   # result
 ```
 
 ### Windows
@@ -51,9 +52,10 @@ cd mcu-skills
 ```powershell
 git clone https://github.com/alexex1993/mcu-skills.git
 cd mcu-skills
+.\scripts\install.ps1 --list
 .\scripts\install.ps1 stm32h750-weact          # junction into ~\.claude\skills
 .\scripts\install.ps1 stm32h750-weact --copy   # or copy, if you want to edit locally
-.\scripts\install.ps1 --list
+.\scripts\install.ps1 --list                   # result
 ```
 
 Then in Claude Code the skill loads by itself when you work on that board, or on demand:
