@@ -1,13 +1,7 @@
 Photos of the Waveshare ESP32-C6-Touch-LCD-1.47 go here.
 
-Worth having, in this order:
+<img width="2560" height="1662" alt="image" src="https://github.com/user-attachments/assets/3109f034-63e3-4451-9a23-72eecf480da3" />
 
-1. **Top shot** — the panel lit, showing there is no RGB LED beside it. That single
-   detail is the fastest way to tell this board from the non-touch ESP32-C6-LCD-1.47.
-2. **Bottom shot** with a readable silkscreen — the 22-pin header labels, the `VBAT`
-   pad, and the RESET/BOOT buttons.
-3. **The header end**, close enough to count pins: 22 here, 18 on the non-touch board.
+<img width="2560" height="1333" alt="image" src="https://github.com/user-attachments/assets/68275eb2-75fa-4941-85c6-2dc7c799b94a" />
 
-Upload images into a GitHub issue or PR and paste the resulting
-`https://github.com/user-attachments/...` URLs here as `<img …>` tags, the way the other
-skills in this repo do.
+<img width="2560" height="1844" alt="image" src="https://github.com/user-attachments/assets/ca809223-f86a-44cf-bb0e-4cc580bf8c07" />
