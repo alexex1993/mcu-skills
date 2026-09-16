@@ -1,11 +1,10 @@
-# Описание на русском языке
-Для рускоязычных пользователей есть статья на [Хабре](https://habr.com/ru/articles/1076082/) по поводу этого репозитория и скиллов к микроконтроллерам 
+# mcu-skills — Claude Code Skills for Microcontrollers (MCU)
 
-# mcu-skills
-
-Claude Code [Agent Skills](https://docs.claude.com/en/docs/claude-code/skills) for embedded
-development — one skill per board, holding the board-specific knowledge that is otherwise
-scattered across a datasheet, a reference manual, a schematic and a weekend of debugging.
+**Claude Code skills for MCU firmware development** on STM32, ESP32, ESP8266, RP2040 / RP2350,
+nRF52 and AVR boards. These are [Agent Skills](https://docs.claude.com/en/docs/claude-code/skills)
+(`SKILL.md`) for embedded development — one skill per board, holding the board-specific knowledge
+that is otherwise scattered across a datasheet, a reference manual, a schematic and a weekend of
+debugging.
 
 A good MCU skill answers, without the model guessing: which pin does what, which clock tree
 actually works, which HAL call silently does nothing, and how to get a build onto the chip.
@@ -35,6 +34,18 @@ actually works, which HAL call silently does nothing, and how to get a build ont
 | [`beu1000-evuba`](skills/baikal/beu1000-evuba) | Baikal Electronics EVU-BA-2.1 | BE-U1000 (3× RISC-V: 2× BR-350, BM-310) |  |
 
 ## Install
+
+### As a Claude Code plugin
+
+The repo is a plugin marketplace with one plugin per board. Inside Claude Code:
+
+```
+/plugin marketplace add alexex1993/mcu-skills
+/plugin install stm32h750-weact@mcu-skills
+```
+
+Plugin names match the skill names in the table above. Or install from a clone with the
+scripts below.
 
 ### macOS / Linux
 
@@ -75,6 +86,7 @@ skills/<family>/<skill-name>/     one skill, ready to copy into ~/.claude/skills
   reference/                      deep detail, read on demand
   template/                       a project that actually builds
   assets/                         photos of the board, pinout images
+.claude-plugin/marketplace.json   plugin marketplace, one plugin per skill
 docs/                             how to author and review a skill
 templates/skill-template/         blank skeleton to start from
 scripts/                          install.sh / install.ps1, validate.sh / validate.ps1
@@ -103,6 +115,11 @@ authoring detail in [docs/AUTHORING.md](docs/AUTHORING.md), review bar in
 
 Rule of thumb for what belongs here: if the answer is in the vendor's getting-started page and
 the model gets it right without help, leave it out. Everything that cost you an evening goes in.
+
+## Articles / Русский
+
+- [Хабр: скиллы Claude Code для микроконтроллеров](https://habr.com/ru/articles/1076082/) —
+  статья об этом репозитории на русском языке.
 
 ## License
 

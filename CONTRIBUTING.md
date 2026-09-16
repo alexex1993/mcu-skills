@@ -156,7 +156,8 @@ One skill per PR. In the description, state:
 [docs/CHECKLIST.md](docs/CHECKLIST.md); if nobody has one, it merges on the strength of your
 hardware notes.
 
-Then add your row to the table in [README.md](README.md).
+Then add your row to the table in [README.md](README.md) and a plugin entry for the skill to
+[.claude-plugin/marketplace.json](.claude-plugin/marketplace.json).
 
 ## Improving an existing skill
 

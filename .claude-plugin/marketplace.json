@@ -1,0 +1,181 @@
+{
+  "name": "mcu-skills",
+  "description": "Claude Code skills for microcontrollers (MCU): board-specific Agent Skills for STM32, ESP32, ESP8266, RP2040/RP2350, nRF52840 and AVR boards — pinouts, clock trees, HAL pitfalls, PlatformIO setup and flashing.",
+  "owner": {
+    "name": "alexex1993",
+    "url": "https://github.com/alexex1993"
+  },
+  "plugins": [
+    {
+      "name": "stm32h750-weact",
+      "source": "./skills/stm32/stm32h750-weact",
+      "skills": ["./"],
+      "strict": false,
+      "description": "Claude Code skill for the WeAct Studio MiniSTM32H7xx core board — STM32H750VBT6 (Cortex-M7).",
+      "category": "embedded",
+      "keywords": ["mcu", "embedded", "firmware", "stm32", "stm32h7", "stm32h750", "weact", "cortex-m7"]
+    },
+    {
+      "name": "stm32f411-blackpill",
+      "source": "./skills/stm32/stm32f411-blackpill",
+      "skills": ["./"],
+      "strict": false,
+      "description": "Claude Code skill for the WeAct Studio Black Pill V3.x and clones — STM32F411CEU6 (Cortex-M4F).",
+      "category": "embedded",
+      "keywords": ["mcu", "embedded", "firmware", "stm32", "stm32f4", "stm32f411", "blackpill", "cortex-m4"]
+    },
+    {
+      "name": "esp32c6-lcd147",
+      "source": "./skills/esp32/esp32c6-lcd147",
+      "skills": ["./"],
+      "strict": false,
+      "description": "Claude Code skill for the Waveshare ESP32-C6-LCD-1.47 — ESP32-C6FH4 (RISC-V).",
+      "category": "embedded",
+      "keywords": ["mcu", "embedded", "firmware", "esp32", "esp32-c6", "waveshare", "lcd", "risc-v"]
+    },
+    {
+      "name": "esp32c6-touch-lcd147",
+      "source": "./skills/esp32/esp32c6-touch-lcd147",
+      "skills": ["./"],
+      "strict": false,
+      "description": "Claude Code skill for the Waveshare ESP32-C6-Touch-LCD-1.47 — ESP32-C6FH8 (RISC-V).",
+      "category": "embedded",
+      "keywords": ["mcu", "embedded", "firmware", "esp32", "esp32-c6", "waveshare", "touch", "lcd", "risc-v"]
+    },
+    {
+      "name": "esp32c3-oled042",
+      "source": "./skills/esp32/esp32c3-oled042",
+      "skills": ["./"],
+      "strict": false,
+      "description": "Claude Code skill for the ESP32-C3 0.42\" OLED board (ABRobot / 01Space) — ESP32-C3FH4 (RISC-V).",
+      "category": "embedded",
+      "keywords": ["mcu", "embedded", "firmware", "esp32", "esp32-c3", "oled", "risc-v"]
+    },
+    {
+      "name": "esp32-wroom-30pin",
+      "source": "./skills/esp32/esp32-wroom-30pin",
+      "skills": ["./"],
+      "strict": false,
+      "description": "Claude Code skill for the 30-pin ESP32 devkit (DOIT V1 / CH340 Type-C) — ESP32-D0WDQ6 (Xtensa LX6).",
+      "category": "embedded",
+      "keywords": ["mcu", "embedded", "firmware", "esp32", "esp32-wroom-32", "devkit", "arduino", "platformio"]
+    },
+    {
+      "name": "esp32-wroom-36pin",
+      "source": "./skills/esp32/esp32-wroom-36pin",
+      "skills": ["./"],
+      "strict": false,
+      "description": "Claude Code skill for the 36-pin ESP32 devkit (original DOIT DevKit V1) — ESP32-D0WDQ6 (Xtensa LX6).",
+      "category": "embedded",
+      "keywords": ["mcu", "embedded", "firmware", "esp32", "esp32-wroom-32", "devkit", "arduino", "platformio"]
+    },
+    {
+      "name": "esp32-wroom-38pin",
+      "source": "./skills/esp32/esp32-wroom-38pin",
+      "skills": ["./"],
+      "strict": false,
+      "description": "Claude Code skill for the 38-pin ESP32 devkit (DevKitC V4 / NodeMCU-32S) — ESP32-D0WDQ6 (Xtensa LX6).",
+      "category": "embedded",
+      "keywords": ["mcu", "embedded", "firmware", "esp32", "esp32-wroom-32", "devkitc", "arduino", "platformio"]
+    },
+    {
+      "name": "esp32s3-cam-40pin",
+      "source": "./skills/esp32/esp32s3-cam-40pin",
+      "skills": ["./"],
+      "strict": false,
+      "description": "Claude Code skill for the 40-pin ESP32-S3 CAM board (Freenove FNK0085 / clones) — ESP32-S3-WROOM-1 N8R8/N16R8 (Xtensa LX7).",
+      "category": "embedded",
+      "keywords": ["mcu", "embedded", "firmware", "esp32", "esp32-s3", "camera", "freenove", "psram"]
+    },
+    {
+      "name": "esp32s3-rlcd42",
+      "source": "./skills/esp32/esp32s3-rlcd42",
+      "skills": ["./"],
+      "strict": false,
+      "description": "Claude Code skill for the Waveshare ESP32-S3-RLCD-4.2 (SKU 33298 / 33507) — ESP32-S3-WROOM-1-N16R8 (Xtensa LX7).",
+      "category": "embedded",
+      "keywords": ["mcu", "embedded", "firmware", "esp32", "esp32-s3", "waveshare", "reflective-lcd"]
+    },
+    {
+      "name": "esp32p4-jc-m3-dev",
+      "source": "./skills/esp32/esp32p4-jc-m3-dev",
+      "skills": ["./"],
+      "strict": false,
+      "description": "Claude Code skill for the Guition JC-ESP32P4-M3-DEV — ESP32-P4NRW32 (2× RISC-V) + ESP32-C6.",
+      "category": "embedded",
+      "keywords": ["mcu", "embedded", "firmware", "esp32", "esp32-p4", "esp32-c6", "guition", "risc-v"]
+    },
+    {
+      "name": "esp8266-nodemcu-30pin",
+      "source": "./skills/esp8266/esp8266-nodemcu-30pin",
+      "skills": ["./"],
+      "strict": false,
+      "description": "Claude Code skill for the 30-pin NodeMCU devkit (DevKit V1.0 / Amica, LoLin V3) — ESP8266EX (ESP-12E/F).",
+      "category": "embedded",
+      "keywords": ["mcu", "embedded", "firmware", "esp8266", "nodemcu", "esp-12e", "arduino", "platformio"]
+    },
+    {
+      "name": "nrf52840-promicro",
+      "source": "./skills/nrf/nrf52840-promicro",
+      "skills": ["./"],
+      "strict": false,
+      "description": "Claude Code skill for the ProMicro nRF52840 V1940 (nice!nano v2 clone / SuperMini) — nRF52840 (Cortex-M4F).",
+      "category": "embedded",
+      "keywords": ["mcu", "embedded", "firmware", "nrf52", "nrf52840", "promicro", "nice-nano", "ble"]
+    },
+    {
+      "name": "atmega328p-nano",
+      "source": "./skills/avr/atmega328p-nano",
+      "skills": ["./"],
+      "strict": false,
+      "description": "Claude Code skill for the Arduino Nano (A000005) — ATmega328P (AVR 8-bit).",
+      "category": "embedded",
+      "keywords": ["mcu", "embedded", "firmware", "avr", "atmega328p", "arduino", "arduino-nano"]
+    },
+    {
+      "name": "atmega32u4-beetle",
+      "source": "./skills/avr/atmega32u4-beetle",
+      "skills": ["./"],
+      "strict": false,
+      "description": "Claude Code skill for the Beetle / CJMCU Mini Arduino Leonardo — ATmega32U4 (AVR 8-bit, native USB).",
+      "category": "embedded",
+      "keywords": ["mcu", "embedded", "firmware", "avr", "atmega32u4", "arduino", "leonardo", "beetle"]
+    },
+    {
+      "name": "lgt8f328p-minievb",
+      "source": "./skills/avr/lgt8f328p-minievb",
+      "skills": ["./"],
+      "strict": false,
+      "description": "Claude Code skill for the LGT8F328P-LQFP32 MiniEVB (Nano-style 30-pin) — LGT8F328P (AVR-compatible).",
+      "category": "embedded",
+      "keywords": ["mcu", "embedded", "firmware", "avr", "lgt8f328p", "logic-green", "arduino"]
+    },
+    {
+      "name": "rp2040-pico",
+      "source": "./skills/rp2/rp2040-pico",
+      "skills": ["./"],
+      "strict": false,
+      "description": "Claude Code skill for the Raspberry Pi Pico and Pico H — RP2040 (2× Cortex-M0+).",
+      "category": "embedded",
+      "keywords": ["mcu", "embedded", "firmware", "rp2040", "raspberry-pi-pico", "arduino-pico", "platformio"]
+    },
+    {
+      "name": "rp2350a-weact",
+      "source": "./skills/rp2/rp2350a-weact",
+      "skills": ["./"],
+      "strict": false,
+      "description": "Claude Code skill for the WeAct Studio RP2350A Core Board (V1.0 and V2.0) — RP2350A (2× Cortex-M33).",
+      "category": "embedded",
+      "keywords": ["mcu", "embedded", "firmware", "rp2350", "rp2350a", "weact", "cortex-m33"]
+    },
+    {
+      "name": "beu1000-evuba",
+      "source": "./skills/baikal/beu1000-evuba",
+      "skills": ["./"],
+      "strict": false,
+      "description": "Claude Code skill for the Baikal Electronics EVU-BA-2.1 — BE-U1000 (3× RISC-V).",
+      "category": "embedded",
+      "keywords": ["mcu", "embedded", "firmware", "baikal", "be-u1000", "risc-v"]
+    }
+  ]
+}
