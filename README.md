@@ -116,8 +116,10 @@ authoring detail in [docs/AUTHORING.md](docs/AUTHORING.md), review bar in
 Rule of thumb for what belongs here: if the answer is in the vendor's getting-started page and
 the model gets it right without help, leave it out. Everything that cost you an evening goes in.
 
-## Articles / Русский
+## Articles
 
+- [dev.to: LLMs confidently lie about your microcontroller](https://dev.to/__3ed627f/llms-confidently-lie-about-your-microcontroller-17ap) —
+  an article about this repo in English.
 - [Хабр: скиллы Claude Code для микроконтроллеров](https://habr.com/ru/articles/1076082/) —
   статья об этом репозитории на русском языке.
 
