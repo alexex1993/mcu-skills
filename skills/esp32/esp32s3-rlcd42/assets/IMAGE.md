@@ -1,8 +1,7 @@
 Photos of the Waveshare ESP32-S3-RLCD-4.2 (SKU 33298 / 33507).
 
-Upload a top shot, a back shot showing the 18650 holder and the TF slot, and a close-up
-of the 2×8 expansion header silkscreen — the header labels are what this skill's
-§"The 2×8 expansion header" is transcribed from, and a reader with the board in hand
-should be able to check them.
+<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/9b55c6b2-3135-44ad-824b-a05659bd6f0f" />
 
-<!-- paste uploaded images here -->
+<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/babae24d-b31e-4638-bba9-03950d521312" />
+
+<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/bfd9693b-ef38-4687-834a-647e8029d1af" />
