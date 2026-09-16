@@ -1,7 +1,7 @@
-﻿<#
+<#
 Install a board skill from this repo into ~/.claude/skills.
 
-  .\scripts\install.ps1 <skill-name>            symlink (default; git pull updates it)
+  .\scripts\install.ps1 <skill-name>            link (default; git pull updates it)
   .\scripts\install.ps1 <skill-name> --copy     copy, so you can edit locally
   .\scripts\install.ps1 --all [--copy]
   .\scripts\install.ps1 --list
@@ -9,8 +9,12 @@ Install a board skill from this repo into ~/.claude/skills.
 
 CLAUDE_SKILLS_DIR overrides the destination (e.g. a project's .claude/skills).
 
-Creating symlinks on Windows requires either Developer Mode enabled or the
-script to run as Administrator. If that's not available, use --copy.
+"link" is a directory junction, not a symlink: junctions need neither
+Administrator nor Developer Mode, while New-Item -ItemType SymbolicLink in
+Windows PowerShell 5.1 requires Administrator even with Developer Mode on.
+
+If script execution is disabled on this machine, run it as
+  powershell -ExecutionPolicy Bypass -File .\scripts\install.ps1 <args>
 #>
 param(
     [Parameter(ValueFromRemainingArguments = $true)]
@@ -30,7 +34,7 @@ $Names = @()
 $HelpText = @"
 Install a board skill from this repo into ~/.claude/skills.
 
-  .\scripts\install.ps1 <skill-name>            symlink (default; git pull updates it)
+  .\scripts\install.ps1 <skill-name>            link (default; git pull updates it)
   .\scripts\install.ps1 <skill-name> --copy     copy, so you can edit locally
   .\scripts\install.ps1 --all [--copy]
   .\scripts\install.ps1 --list
@@ -38,6 +42,14 @@ Install a board skill from this repo into ~/.claude/skills.
 
 CLAUDE_SKILLS_DIR overrides the destination (e.g. a project's .claude/skills).
 "@
+
+# Write-Error under ErrorActionPreference=Stop throws, so the exit code would
+# always be 1 and the user gets a stack trace; print to stderr and exit instead.
+function Exit-WithError {
+    param([string]$Message, [int]$Code = 1)
+    [Console]::Error.WriteLine($Message)
+    exit $Code
+}
 
 foreach ($arg in $Args_) {
     switch ($arg) {
@@ -51,10 +63,7 @@ foreach ($arg in $Args_) {
             exit 0
         }
         default {
-            if ($arg -like '-*') {
-                Write-Error "unknown option: $arg"
-                exit 2
-            }
+            if ($arg -like '-*') { Exit-WithError "unknown option: $arg" 2 }
             $Names += $arg
         }
     }
@@ -72,6 +81,20 @@ function Find-SkillPath {
     if ($d) { $d.FullName } else { $null }
 }
 
+function Test-IsLink {
+    param($Item)
+    [bool]($Item.Attributes -band [IO.FileAttributes]::ReparsePoint)
+}
+
+# Item.Target is string[] in Windows PowerShell 5.1 and a plain string in
+# PowerShell 7, where indexing it would return the first character.
+function Get-LinkTarget {
+    param($Item)
+    $t = @($Item.Target)
+    if ($t.Count -eq 0 -or [string]::IsNullOrEmpty($t[0])) { return $null }
+    ([string]$t[0]).TrimEnd('\')
+}
+
 if ($Action -eq 'list') {
     Write-Host ("{0,-28} {1,-10} {2}" -f 'SKILL', 'FAMILY', 'INSTALLED')
     foreach ($p in (Get-SkillDirs)) {
@@ -81,7 +104,7 @@ if ($Action -eq 'list') {
         $status = '-'
         if (Test-Path -LiteralPath $target) {
             $item = Get-Item -LiteralPath $target -Force
-            if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) { $status = 'symlink' }
+            if (Test-IsLink $item) { $status = 'link' }
             elseif ($item.PSIsContainer) { $status = 'copy' }
         }
         Write-Host ("{0,-28} {1,-10} {2}" -f $n, $f, $status)
@@ -94,8 +117,7 @@ if ($Action -eq 'all') {
 }
 
 if ($Names.Count -eq 0) {
-    Write-Error "nothing to do - pass a skill name, --all or --list"
-    exit 2
+    Exit-WithError "nothing to do - pass a skill name, --all or --list" 2
 }
 
 New-Item -ItemType Directory -Path $Dest -Force | Out-Null
@@ -106,7 +128,9 @@ foreach ($name in $Names) {
     if ($Action -eq 'uninstall') {
         if (Test-Path -LiteralPath $target) {
             $item = Get-Item -LiteralPath $target -Force
-            if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) {
+            # Remove-Item -Recurse on a link in PS 5.1 deletes the files it
+            # points to; Delete() removes only the link itself.
+            if (Test-IsLink $item) {
                 $item.Delete()
             } else {
                 Remove-Item -LiteralPath $target -Recurse -Force
@@ -120,14 +144,13 @@ foreach ($name in $Names) {
 
     $src = Find-SkillPath -Name $name
     if ([string]::IsNullOrEmpty($src)) {
-        Write-Error "no such skill: $name (try --list)"
-        exit 1
+        Exit-WithError "no such skill: $name (try --list)"
     }
 
     if (Test-Path -LiteralPath $target) {
         $item = Get-Item -LiteralPath $target -Force
-        $isLink = [bool]($item.Attributes -band [IO.FileAttributes]::ReparsePoint)
-        if ($isLink -and $item.Target -and ($item.Target[0] -eq $src)) {
+        $isLink = Test-IsLink $item
+        if ($isLink -and $Mode -eq 'link' -and (Get-LinkTarget $item) -eq $src.TrimEnd('\')) {
             Write-Host "ok       $name (already linked)"
             continue
         }
@@ -142,15 +165,14 @@ foreach ($name in $Names) {
 
     if ($Mode -eq 'link') {
         try {
-            New-Item -ItemType SymbolicLink -Path $target -Target $src -Force | Out-Null
+            New-Item -ItemType Junction -Path $target -Target $src | Out-Null
             Write-Host "linked   $target -> $src"
         } catch {
-            Write-Host "failed to create symlink for $name : $($_.Exception.Message)"
-            Write-Host "Tip: enable Windows Developer Mode, run PowerShell as Administrator, or use --copy instead."
-            exit 1
+            Exit-WithError ("failed to link $name : $($_.Exception.Message)`n" +
+                "Tip: junctions only work between local drives - use --copy instead.")
         }
     } else {
-        Copy-Item -Path $src -Destination $target -Recurse -Force
+        Copy-Item -LiteralPath $src -Destination $target -Recurse -Force
         Write-Host "copied   $target"
     }
 }

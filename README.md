@@ -112,13 +112,15 @@ cd mcu-skills
 ```powershell
 git clone https://github.com/alexex1993/mcu-skills.git
 cd mcu-skills
-.\scripts\install.ps1 stm32h750-weact          # symlink into ~\.claude\skills
+.\scripts\install.ps1 stm32h750-weact          # junction into ~\.claude\skills
 .\scripts\install.ps1 stm32h750-weact --copy   # or copy, if you want to edit locally
 .\scripts\install.ps1 --list
 ```
 
-Creating symlinks on Windows needs either [Developer Mode](https://learn.microsoft.com/windows/apps/get-started/enable-your-device-for-development)
-enabled or PowerShell running as Administrator; without either, use `--copy` instead.
+The default install is a directory junction rather than a symlink, so it needs neither
+Administrator rights nor Developer Mode, and `git pull` still updates the installed skill.
+If PowerShell refuses to run scripts ("running scripts is disabled on this system"), call it
+as `powershell -ExecutionPolicy Bypass -File .\scripts\install.ps1 <args>`.
 
 Then in Claude Code the skill loads by itself when you work on that board, or on demand:
 
