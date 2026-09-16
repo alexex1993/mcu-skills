@@ -97,6 +97,8 @@ letting the model reason from the nearest board.
 
 ## Install
 
+### macOS / Linux
+
 ```sh
 git clone https://github.com/alexex1993/mcu-skills.git
 cd mcu-skills
@@ -104,6 +106,19 @@ cd mcu-skills
 ./scripts/install.sh stm32h750-weact --copy   # or copy, if you want to edit locally
 ./scripts/install.sh --list
 ```
+
+### Windows
+
+```powershell
+git clone https://github.com/alexex1993/mcu-skills.git
+cd mcu-skills
+.\scripts\install.ps1 stm32h750-weact          # symlink into ~\.claude\skills
+.\scripts\install.ps1 stm32h750-weact --copy   # or copy, if you want to edit locally
+.\scripts\install.ps1 --list
+```
+
+Creating symlinks on Windows needs either [Developer Mode](https://learn.microsoft.com/windows/apps/get-started/enable-your-device-for-development)
+enabled or PowerShell running as Administrator; without either, use `--copy` instead.
 
 Then in Claude Code the skill loads by itself when you work on that board, or on demand:
 
@@ -124,7 +139,7 @@ skills/<family>/<skill-name>/     one skill, ready to copy into ~/.claude/skills
   assets/                         photos of the board, pinout images
 docs/                             how to author and review a skill
 templates/skill-template/         blank skeleton to start from
-scripts/                          install.sh, validate.sh
+scripts/                          install.sh / install.ps1, validate.sh / validate.ps1
 ```
 
 Every skill has an `assets/` directory for pictures of the *physical* board — a top shot, a
