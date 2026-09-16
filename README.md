@@ -34,67 +34,6 @@ actually works, which HAL call silently does nothing, and how to get a build ont
 | [`rp2350a-weact`](skills/rp2/rp2350a-weact) | WeAct Studio RP2350A Core Board (V1.0 and V2.0) | RP2350A (2× Cortex-M33) | <img src="https://github.com/user-attachments/assets/b3b84cc3-8e8a-45be-bb49-882ce5f7499c" width="120"> |
 | [`beu1000-evuba`](skills/baikal/beu1000-evuba) | Baikal Electronics EVU-BA-2.1 | BE-U1000 (3× RISC-V: 2× BR-350, BM-310) |  |
 
-`esp8266-nodemcu-30pin` covers both 30-pin NodeMCU revisions — they share the module and
-the pin map, and differ only in USB bridge (CP2102 vs CH340G), board width and two pads.
-Its §"Confirm the board first" has that table.
-
-`esp32s3-cam-40pin` covers the 40-pin ESP32-S3 camera board sold under a dozen names — Freenove
-FNK0085, "ESP32-S3 CAM", "ESP32-S3-WROOM N16R8 CAM" — which all copy one header and one camera
-pin map. It is not the 44-pin DevKitC-1, the XIAO S3 Sense or an ESP32-S3-CAM-LCD board; those use
-incompatible camera pins. Its §"Confirm the board first" has the decision table.
-
-`esp32c6-touch-lcd147` and `esp32c6-lcd147` are two different boards, not two revisions
-of one. They share a vendor, a chip family and a 172x320 1.47" panel, and almost nothing
-else: different SoC variant (C6FH8/8 MB vs C6FH4/4 MB), different panel controller (JD9853
-vs ST7789), and a pin map in which only `LCD_CS`, `LCD_DC` and `TF_CS` land on the same
-GPIOs. Porting pin numbers between them produces a dark screen rather than an error, so
-each skill opens with a "Confirm the board first" table; the touch one's
-§"Differences from the non-touch ESP32-C6-LCD-1.47" is the full diff.
-
-`lgt8f328p-minievb` sits in the `avr` family because the toolchain is avr-gcc and the pin
-map is a Nano's, but the LGT8F328P is not an ATmega328P: it is a Logic Green LGT8XM core that
-executes the AVR instruction set inside a different chip. Sketches compile and then behave
-differently — the skill's rules section is mostly that list. It covers the LQFP32 board only;
-its §"Confirm the board first" has the package/variant table for LQFP48 and SSOP20.
-
-`beu1000-evuba` is the one skill here written in Russian: the board's only documentation —
-reference manual, technical specification, board description — is Russian, and so are the register
-and jumper names it has to quote. Its `description:` carries both languages so the skill still
-triggers on English requests.
-
-`esp32s3-rlcd42` is the reflective-LCD board, not a colour-touch one. Its wiki's
-"Interface Introduction" GPIO table has rows that are simply wrong: it assigns `TP_INT`
-and `TP_RESET` to GPIO7 and GPIO42 and carries a `QMI8658C` column, for a touch panel and
-an IMU this board does not have — the touch pins exist on the LCD's FPC connector and are
-all unconnected, and the schematic PDF's own copy of the same table leaves those cells
-blank. It also appears to omit an SD chip-select, which turns out not to exist because the
-TF slot is on SDMMC rather than SPI. The skill transcribes the table and then corrects it
-against the schematic in §"Rules" and `reference/board-hardware.md` §2.2, because copying
-it verbatim is the most likely way to get this board wrong.
-
-`esp32p4-jc-m3-dev` is the first skill here for a chip with **no radio of its own**. The
-ESP32-P4 is an application processor; the Wi-Fi 6 and Bluetooth on this board come from an
-ESP32-C6 sitting inside the same module, reachable only over SDIO through
-`esp_hosted`, so `esp_wifi_init()` failing is usually a transport problem rather than a
-Wi-Fi one. Two further things separate it from every other board in this repo. The P4 comes
-in **two mutually incompatible silicon revisions** — Guition ships two complete copies of
-every demo, `P4_V1.3` and `P4_V3X`, and ESP-IDF 5.5 defaults to the wrong one for the
-boards being sold; the symptom is a bootloader that dies with `Illegal instruction`
-straight after `entry 0x...`. And the **official PlatformIO platform cannot build for the
-P4 at all**, at any version, so the skill's `platformio.ini` pins the pioarduino fork by
-URL. Its §"Rules" opens with both.
-
-The three ESP32-WROOM-32 skills are deliberately separate: the boards share silicon but not
-a header, and the pin map is what a skill is for. Pick by counting pins on one side — 15,
-18 or 19. `esp32-wroom-36pin` §"Confirm the board first" has the decision table.
-
-All nine `esp32` skills also carry `reference/esp32-family.md`, a cross-chip file for the
-"should this be a different ESP32?" question — what does and does not port between chips,
-radio and USB capability per chip, the RMT generation table, deep-sleep memory and ULP/LP
-core availability, and a chip-selection table. It is the only file in the repo that talks
-about chips no skill covers (S2, C2, C5, C61, H2, H4), and it says so rather than
-letting the model reason from the nearest board.
-
 ## Install
 
 ### macOS / Linux
@@ -116,11 +55,6 @@ cd mcu-skills
 .\scripts\install.ps1 stm32h750-weact --copy   # or copy, if you want to edit locally
 .\scripts\install.ps1 --list
 ```
-
-The default install is a directory junction rather than a symlink, so it needs neither
-Administrator rights nor Developer Mode, and `git pull` still updates the installed skill.
-If PowerShell refuses to run scripts ("running scripts is disabled on this system"), call it
-as `powershell -ExecutionPolicy Bypass -File .\scripts\install.ps1 <args>`.
 
 Then in Claude Code the skill loads by itself when you work on that board, or on demand:
 

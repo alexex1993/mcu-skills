@@ -59,6 +59,11 @@ sees when deciding whether to load anything else. Two halves:
 
 Failure mode to avoid: `description: STM32H750 board skill`. It triggers on almost nothing.
 
+Write in English unless the board's only documentation is in another language and the
+register, jumper and signal names the skill has to quote are in that language too
+(`beu1000-evuba` is Russian for that reason). Then the `description:` carries both
+languages, so the skill still triggers on English requests.
+
 ### Body
 
 Aim for under ~500 lines. Suggested shape, in this order:

@@ -32,6 +32,20 @@ Read `reference/board-hardware.md` before choosing pins.
 - `template/` — a **project that builds clean**, in two variants, plus a scaffold script.
   See `template/README.md`.
 
+## Confirm the board first
+
+The 30-, 36- and 38-pin ESP32 devkits share silicon but not a header, and the pin map is
+what this skill is for. Count the pins on one side:
+
+| Pins per side | Flash pins on the header | `IO0`/`D0` pin | GND pins | Skill |
+|---|---|---|---|---|
+| 15 | no | no | 2 | `esp32-wroom-30pin` |
+| 18 | yes (`SD2 SD3 CMD` / `SD1 SD0 CLK`) | no | 2 | `esp32-wroom-36pin` |
+| **19** | **yes** (`D2 D3 CMD` / `D1 D0 CLK`) | **yes** | **3** | **this one** |
+
+If the count does not match, switch skills. `reference/board-hardware.md` §1 has the detail,
+including the silkscreen trap where `D2` means GPIO9.
+
 ## Orientation
 
 | | |
