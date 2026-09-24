@@ -1,0 +1,34 @@
+# --- Silicon revision. Critical. ---
+# Boards sold as "P4_V1.3" carry ESP32-P4 rev v1.3 (esptool prints
+# "revision v1.3", ROM esp32p4-eco2).  ESP-IDF 5.5 defaults to building for
+# rev >= 3.1, and rev <3.0 / >=3.0 support is mutually exclusive.  Without
+# these two lines the 2nd-stage bootloader dies right after "entry 0x..." with
+# "Guru Meditation Error: Illegal instruction".
+# On a rev >= 3.0 board (Guition's "P4_V3X") delete both and use
+# CONFIG_ESP32P4_REV_MIN_301=y.
+CONFIG_ESP32P4_SELECTS_REV_LESS_V3=y
+CONFIG_ESP32P4_REV_MIN_100=y
+
+# --- 16 MB Boya flash (JEDEC 0x684018), QIO ---
+# board_build.flash_mode in platformio.ini does not reach sdkconfig: without
+# this line the app runs its flash in DIO.
+CONFIG_ESPTOOLPY_FLASHMODE_QIO=y
+CONFIG_ESPTOOLPY_FLASHSIZE_16MB=y
+# Silences "Detected boya flash chip but using generic driver" and gives the
+# chip-specific driver (suspend, QE bit handling).
+CONFIG_SPI_FLASH_SUPPORT_BOYA_CHIP=y
+# Duplicate of board_build.partitions in platformio.ini, which is the one
+# PlatformIO actually uses.
+CONFIG_PARTITION_TABLE_SINGLE_APP_LARGE=y
+
+# --- Console on the native USB-Serial/JTAG (303A:1001) ---
+CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=y
+
+# --- 32 MB in-package PSRAM: HEX, 200 MHz (250 MHz needs rev >= 3.0) ---
+CONFIG_SPIRAM=y
+CONFIG_SPIRAM_MODE_HEX=y
+CONFIG_SPIRAM_SPEED_200M=y
+
+# The default 3.5 KB main stack is enough for this template; esp_hosted /
+# esp_wifi_remote bring-up in app_main needs 10240 (see recipes.md §9).
+CONFIG_ESP_MAIN_TASK_STACK_SIZE=8192

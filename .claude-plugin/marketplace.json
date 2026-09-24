@@ -106,6 +106,15 @@
       "keywords": ["mcu", "embedded", "firmware", "esp32", "esp32-p4", "esp32-c6", "guition", "risc-v"]
     },
     {
+      "name": "esp32p4-jc4880p443",
+      "source": "./",
+      "skills": ["./skills/esp32/esp32p4-jc4880p443"],
+      "strict": false,
+      "description": "Claude Code skill for the Guition JC4880P443C_I_W 4.3\" 480x800 touch display — ESP32-P4NRW32 (2× RISC-V) + ESP32-C6.",
+      "category": "embedded",
+      "keywords": ["mcu", "embedded", "firmware", "esp32", "esp32-p4", "esp32-c6", "guition", "mipi-dsi", "st7701", "touch"]
+    },
+    {
       "name": "esp8266-nodemcu-30pin",
       "source": "./",
       "skills": ["./skills/esp8266/esp8266-nodemcu-30pin"],

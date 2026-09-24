@@ -1,0 +1,8 @@
+## Resolved and run on hardware: esp_lcd_st7701 1.1.5, esp_lcd_touch_gt911 1.2.1
+## (+ esp_lcd_touch 1.2.1).  The ST7701 panel's init sequence is passed in from
+## src/display.c: this registry driver's built-in default is for another glass
+## and leaves this panel black.
+dependencies:
+  idf: ">=5.5"
+  espressif/esp_lcd_st7701: "^1.1.5"
+  espressif/esp_lcd_touch_gt911: "^1.2.1"
