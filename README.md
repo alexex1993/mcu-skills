@@ -15,6 +15,7 @@ actually works, which HAL call silently does nothing, and how to get a build ont
 |---|---|---|---|
 | [`stm32h750-weact`](skills/stm32/stm32h750-weact) | WeAct Studio MiniSTM32H7xx core board | STM32H750VBT6 (Cortex-M7) | <img src="https://github.com/user-attachments/assets/096199da-56a0-4aa2-9711-bba7d59dc035" width="120"> |
 | [`stm32f411-blackpill`](skills/stm32/stm32f411-blackpill) | WeAct Studio "Black Pill" V3.x (and clones) | STM32F411CEU6 (Cortex-M4F) | <img src="https://github.com/user-attachments/assets/430196ed-a5b6-4651-b5eb-ee44fcd09235" width="120"> |
+| [`stm32f401rc-blackpill`](skills/stm32/stm32f401rc-blackpill) | 40-pin "Black Pill" clone with the WeAct HID bootloader | STM32F401RCT6 (Cortex-M4F) |  |
 | [`esp32c6-lcd147`](skills/esp32/esp32c6-lcd147) | Waveshare ESP32-C6-LCD-1.47 | ESP32-C6FH4 (RISC-V) | <img src="https://github.com/user-attachments/assets/fa79311c-b137-4550-b5be-d545019ebe28" width="120"> |
 | [`esp32c6-touch-lcd147`](skills/esp32/esp32c6-touch-lcd147) | Waveshare ESP32-C6-Touch-LCD-1.47 | ESP32-C6FH8 (RISC-V) | <img src="https://github.com/user-attachments/assets/3109f034-63e3-4451-9a23-72eecf480da3" width="120"> |
 | [`esp32c3-oled042`](skills/esp32/esp32c3-oled042) | ESP32-C3 0.42" OLED (ABRobot / 01Space) | ESP32-C3FH4 (RISC-V) | <img src="https://github.com/user-attachments/assets/06dbaf31-eb85-431a-8bfb-ae2e00d3e5cd" width="120"> |

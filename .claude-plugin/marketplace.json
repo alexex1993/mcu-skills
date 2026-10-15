@@ -25,6 +25,15 @@
       "keywords": ["mcu", "embedded", "firmware", "stm32", "stm32f4", "stm32f411", "blackpill", "cortex-m4"]
     },
     {
+      "name": "stm32f401rc-blackpill",
+      "source": "./",
+      "skills": ["./skills/stm32/stm32f401rc-blackpill"],
+      "strict": false,
+      "description": "Claude Code skill for the 40-pin STM32F401RCT6 Black Pill with the WeAct HID bootloader — STM32F401RCT6 (Cortex-M4F).",
+      "category": "embedded",
+      "keywords": ["mcu", "embedded", "firmware", "stm32", "stm32f4", "stm32f401", "blackpill", "weact", "hid-bootloader", "usb-cdc", "cortex-m4"]
+    },
+    {
       "name": "esp32c6-lcd147",
       "source": "./",
       "skills": ["./skills/esp32/esp32c6-lcd147"],
