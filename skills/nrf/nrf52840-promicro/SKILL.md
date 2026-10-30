@@ -1,6 +1,6 @@
 ---
 name: nrf52840-promicro
-description: Firmware development for the ProMicro nRF52840 (V1940) — the nice!nano v2 compatible clone also sold as SuperMini nRF52840, nRF52840 Pro Micro or nRFMicro (nRF52840 QIAA, Cortex-M4F @ 64 MHz, 1 MB flash / 256 KB RAM, BLE 5 + 802.15.4, native USB, Adafruit UF2 bootloader with SoftDevice S140). Covers the PlatformIO + Adafruit nRF52 Arduino setup for a board that ships in neither, the vendored board definition and Pro Micro pin map, USB CDC via TinyUSB, Bluefruit BLE, the 32.768 kHz crystal that clones omit, SAADC pins, NFC pins as GPIO, and Zephyr's promicro_nrf52840 board target. Use when working on this board or any nice!nano v2 / ZMK keyboard controller: project setup, platformio.ini, pin mapping, LED not blinking, double-tap RESET and UF2/DFU flashing, SoftDevice version mismatches, a board that enumerates but never runs, or debugging why something on the board does not work.
+description: "Firmware development for the ProMicro nRF52840 (V1940) — the nice!nano v2 compatible clone also sold as SuperMini nRF52840, nRF52840 Pro Micro or nRFMicro (nRF52840 QIAA, Cortex-M4F @ 64 MHz, 1 MB flash / 256 KB RAM, BLE 5 + 802.15.4, native USB, Adafruit UF2 bootloader with SoftDevice S140). Covers the PlatformIO + Adafruit nRF52 Arduino setup for a board that ships in neither, the vendored board definition and Pro Micro pin map, USB CDC via TinyUSB, Bluefruit BLE, the 32.768 kHz crystal that clones omit, SAADC pins, NFC pins as GPIO, and Zephyr's promicro_nrf52840 board target. Use when working on this board or any nice!nano v2 / ZMK keyboard controller: project setup, platformio.ini, pin mapping, LED not blinking, double-tap RESET and UF2/DFU flashing, SoftDevice version mismatches, a board that enumerates but never runs, or debugging why something on the board does not work."
 ---
 
 # ProMicro nRF52840 (V1940)
@@ -191,8 +191,10 @@ not measured.
 
 Do not hand-assemble one — the vendored board definition is the hard part.
 
+Run from the directory containing this `SKILL.md`; use an absolute path for the new project.
+
 ```sh
-~/.claude/skills/nrf52840-promicro/template/variants/new-project.sh <target-dir> [--full|--minimal|--ble]
+./template/variants/new-project.sh <target-dir> [--full|--minimal|--ble]
 cd <target-dir> && pio run
 # double-tap RESET, then:
 pio run -t upload -t monitor

@@ -1,6 +1,6 @@
 ---
 name: atmega328p-nano
-description: Firmware development for the Arduino Nano (A000005, ATmega328P @ 16 MHz, 5 V) — its 30 KB usable flash, 2 KB SRAM, 1 KB EEPROM, 8-channel 10-bit ADC, six 8-bit PWM pins across three timers, UART shared with the USB-serial chip, I2C on A4/A5, SPI on D10–D13, sleep modes, and the Arduino AVR core + PlatformIO setup around them. Use when working on this board or any ATmega328P Nano clone (FTDI or CH340 USB): project setup, platformio.ini, old-vs-new bootloader uploads, pin mapping, A6/A7 restrictions, timer/Servo/tone conflicts, the 2 KB SRAM budget, analog references, powering from VIN, ICSP recovery, or debugging why something on the board does not work.
+description: "Firmware development for the Arduino Nano (A000005, ATmega328P @ 16 MHz, 5 V) — its 30 KB usable flash, 2 KB SRAM, 1 KB EEPROM, 8-channel 10-bit ADC, six 8-bit PWM pins across three timers, UART shared with the USB-serial chip, I2C on A4/A5, SPI on D10–D13, sleep modes, and the Arduino AVR core + PlatformIO setup around them. Use when working on this board or any ATmega328P Nano clone (FTDI or CH340 USB): project setup, platformio.ini, old-vs-new bootloader uploads, pin mapping, A6/A7 restrictions, timer/Servo/tone conflicts, the 2 KB SRAM budget, analog references, powering from VIN, ICSP recovery, or debugging why something on the board does not work."
 ---
 
 # Arduino Nano (ATmega328P)
@@ -137,8 +137,10 @@ board.
 
 Do not hand-assemble one. `template/` builds clean; scaffold from it:
 
+Run from the directory containing this `SKILL.md`; use an absolute path for the new project.
+
 ```sh
-~/.claude/skills/atmega328p-nano/template/variants/new-project.sh <target-dir> [--full|--minimal]
+./template/variants/new-project.sh <target-dir> [--full|--minimal]
 cd <target-dir> && pio run
 ```
 

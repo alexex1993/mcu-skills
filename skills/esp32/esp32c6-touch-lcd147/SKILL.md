@@ -1,6 +1,6 @@
 ---
 name: esp32c6-touch-lcd147
-description: Firmware development for the Waveshare ESP32-C6-Touch-LCD-1.47 board (ESP32-C6FH8, QFN32, 8 MB flash, SKU 31203 / 31201-M) — its 1.47" 172x320 JD9853 IPS panel, AXS5106L capacitive touch controller on I2C 0x63, QMI8658A IMU on I2C 0x6B, microSD/TF slot on the shared SPI2 bus, ETA6098 battery charger with VBAT sensing, USB-Serial-JTAG console, Wi-Fi 6/BLE/802.15.4 radio, and the ESP-IDF + PlatformIO setup around them. Use when working on this board: project setup, platformio.ini and sdkconfig, pin mapping and strapping pins, JD9853 bring-up, touch coordinates and calibration, LVGL memory budgeting, backlight PWM, TF card on the shared bus, battery voltage, flashing over Type-C, or debugging why something on the board does not work. This is NOT the non-touch ESP32-C6-LCD-1.47 (ST7789, 4 MB) — the two share a name and almost no pins.
+description: "Firmware development for the Waveshare ESP32-C6-Touch-LCD-1.47 board (ESP32-C6FH8, QFN32, 8 MB flash, SKU 31203 / 31201-M) — its 1.47\" 172x320 JD9853 IPS panel, AXS5106L capacitive touch controller on I2C 0x63, QMI8658A IMU on I2C 0x6B, microSD/TF slot on the shared SPI2 bus, ETA6098 battery charger with VBAT sensing, USB-Serial-JTAG console, Wi-Fi 6/BLE/802.15.4 radio, and the ESP-IDF + PlatformIO setup around them. Use when working on this board: project setup, platformio.ini and sdkconfig, pin mapping and strapping pins, JD9853 bring-up, touch coordinates and calibration, LVGL memory budgeting, backlight PWM, TF card on the shared bus, battery voltage, flashing over Type-C, or debugging why something on the board does not work. This is NOT the non-touch ESP32-C6-LCD-1.47 (ST7789, 4 MB) — the two share a name and almost no pins."
 ---
 
 # Waveshare ESP32-C6-Touch-LCD-1.47
@@ -200,8 +200,10 @@ tile — and budget before writing code.
 
 Do not hand-assemble one. `template/` builds clean; scaffold from it:
 
+Run from the directory containing this `SKILL.md`; use an absolute path for the new project.
+
 ```sh
-~/.claude/skills/esp32c6-touch-lcd147/template/variants/new-project.sh <target-dir> [--full|--minimal]
+./template/variants/new-project.sh <target-dir> [--full|--minimal]
 cd <target-dir> && pio run
 ```
 

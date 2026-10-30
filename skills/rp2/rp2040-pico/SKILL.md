@@ -1,6 +1,6 @@
 ---
 name: rp2040-pico
-description: Firmware development for the Raspberry Pi Pico (original, RP2040 — dual Cortex-M0+ @ 133 MHz, 264 KB SRAM, 2 MB QSPI flash) — its 26 exposed GPIO, 4-channel 12-bit ADC, 16-channel PWM, 2× UART/I2C/SPI, PIO state machines, USB 1.1 CDC, VSYS/VBUS/SMPS power wiring, and the PlatformIO + arduino-pico (earlephilhower) setup around them. Use when working on this board, any Pico H or Pico clone, or a bare RP2040: project setup, platformio.ini, the earlephilhower-vs-Mbed core choice, pin mapping, USB CDC serial, analogRead/analogWrite behaviour, Wire/SPI defaults, battery power, EEPROM emulation, BOOTSEL/UF2 flashing, or debugging why something on the board does not work.
+description: "Firmware development for the Raspberry Pi Pico (original, RP2040 — dual Cortex-M0+ @ 133 MHz, 264 KB SRAM, 2 MB QSPI flash) — its 26 exposed GPIO, 4-channel 12-bit ADC, 16-channel PWM, 2× UART/I2C/SPI, PIO state machines, USB 1.1 CDC, VSYS/VBUS/SMPS power wiring, and the PlatformIO + arduino-pico (earlephilhower) setup around them. Use when working on this board, any Pico H or Pico clone, or a bare RP2040: project setup, platformio.ini, the earlephilhower-vs-Mbed core choice, pin mapping, USB CDC serial, analogRead/analogWrite behaviour, Wire/SPI defaults, battery power, EEPROM emulation, BOOTSEL/UF2 flashing, or debugging why something on the board does not work."
 ---
 
 # Raspberry Pi Pico (RP2040)
@@ -156,8 +156,10 @@ BOOTSEL, ~1.3 mA sleep, ~0.8 mA dormant, 90+ mA loaded.
 
 Do not hand-assemble one. `template/` builds clean; scaffold from it:
 
+Run from the directory containing this `SKILL.md`; use an absolute path for the new project.
+
 ```sh
-~/.claude/skills/rp2040-pico/template/variants/new-project.sh <target-dir> [--full|--minimal]
+./template/variants/new-project.sh <target-dir> [--full|--minimal]
 cd <target-dir> && pio run -t upload -t monitor
 ```
 

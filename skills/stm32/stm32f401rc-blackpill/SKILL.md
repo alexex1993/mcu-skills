@@ -1,6 +1,6 @@
 ---
 name: stm32f401rc-blackpill
-description: Firmware development for the 40-pin "Black Pill"-format board with an STM32F401RCT6 (STM32F401RC, LQFP64, 256 KB flash, 64 KB RAM, 84 MHz) that ships with the WeAct Studio HID Bootloader (USB 0483:572A, flash 0x08000000-0x08003FFF, app at 0x08004000) — its PC13 LED, KEY button on PA0, 25 MHz HSE, USB-C on USB_OTG_FS, and the PlatformIO + STM32Cube HAL setup around them, including a USB CDC virtual COM port for printf debugging. Use when working on this board, an unbranded F401RCT6 Black Pill clone, or any STM32F401/F411 board that enumerates as "WeAct Studio HID Bootloader": project setup, platformio.ini, linking at 0x08004000, flashing through the HID bootloader or ROM DFU, the app starting behind a bootloader (VTOR, SysTick, clock hand-off), clock/PLL configuration for 84 MHz plus 48 MHz USB, printf/serial console over USB (no /dev/cu or COM port), a blink that never starts or hangs in HAL_Delay, entering or recovering the bootloader, or debugging why something on the board does not work.
+description: "Firmware development for the 40-pin \"Black Pill\"-format board with an STM32F401RCT6 (STM32F401RC, LQFP64, 256 KB flash, 64 KB RAM, 84 MHz) that ships with the WeAct Studio HID Bootloader (USB 0483:572A, flash 0x08000000-0x08003FFF, app at 0x08004000) — its PC13 LED, KEY button on PA0, 25 MHz HSE, USB-C on USB_OTG_FS, and the PlatformIO + STM32Cube HAL setup around them, including a USB CDC virtual COM port for printf debugging. Use when working on this board, an unbranded F401RCT6 Black Pill clone, or any STM32F401/F411 board that enumerates as \"WeAct Studio HID Bootloader\": project setup, platformio.ini, linking at 0x08004000, flashing through the HID bootloader or ROM DFU, the app starting behind a bootloader (VTOR, SysTick, clock hand-off), clock/PLL configuration for 84 MHz plus 48 MHz USB, printf/serial console over USB (no /dev/cu or COM port), a blink that never starts or hangs in HAL_Delay, entering or recovering the bootloader, or debugging why something on the board does not work."
 ---
 
 # STM32F401RCT6 "Black Pill" with the WeAct HID bootloader
@@ -117,9 +117,11 @@ Linux hidapi needs a udev rule for `0483:572A` — `reference/board-hardware.md`
 Do not hand-assemble one — the linker script, the `Reset_Handler` and the uploader have to agree.
 Scaffold from `template/`:
 
+Run from the directory containing this `SKILL.md`; use an absolute path for the new project.
+
 ```sh
-~/.claude/skills/stm32f401rc-blackpill/template/variants/new-project.sh <target-dir>            # full
-~/.claude/skills/stm32f401rc-blackpill/template/variants/new-project.sh <target-dir> --minimal  # blink only
+./template/variants/new-project.sh <target-dir>            # full
+./template/variants/new-project.sh <target-dir> --minimal  # blink only
 cd <target-dir> && pio run && pio run -t upload
 ```
 

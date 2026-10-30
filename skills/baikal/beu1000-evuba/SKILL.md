@@ -1,6 +1,6 @@
 ---
 name: beu1000-evuba
-description: Разработка прошивок для BE-U1000 (Baikal Electronics / Байкал Электроникс, три ядра RISC-V: BR-350 и BM-310) на отладочных платах EVU-BA-2.1, EVU-BA-2.0 и EVU-BA-1.2 — её eFlash и QSPI flash, UART0/BootROM CLI, PWMA (захват и импульсы), АЦП с DMA, CAN FD, SPI, WDT, CLIC, а также SDK Байкала и его система сборки на make. Use when working on this board or any BE-U1000 / BMCU_U project (SDK 2.1/2.3, riscv32-none-elf, dfu-util, OpenOCD): настройка проекта, Makefile и MEM_REG_ROM, карта выводов и разъёмы XP1/XP8/XP9/XP10, режимы начальной загрузки и страповые выводы, прошивка по UART XMODEM либо USB DFU, работа с eFlash и TCM, прерывания и CLIC, отладка по JTAG — и разбор, почему плата молчит, не стартует, зависает или почему периферия «настроилась», а обмена нет.
+description: "Разработка прошивок для BE-U1000 (Baikal Electronics / Байкал Электроникс, три ядра RISC-V: BR-350 и BM-310) на отладочных платах EVU-BA-2.1, EVU-BA-2.0 и EVU-BA-1.2 — её eFlash и QSPI flash, UART0/BootROM CLI, PWMA (захват и импульсы), АЦП с DMA, CAN FD, SPI, WDT, CLIC, а также SDK Байкала и его система сборки на make. Use when working on this board or any BE-U1000 / BMCU_U project (SDK 2.1/2.3, riscv32-none-elf, dfu-util, OpenOCD): настройка проекта, Makefile и MEM_REG_ROM, карта выводов и разъёмы XP1/XP8/XP9/XP10, режимы начальной загрузки и страповые выводы, прошивка по UART XMODEM либо USB DFU, работа с eFlash и TCM, прерывания и CLIC, отладка по JTAG — и разбор, почему плата молчит, не стартует, зависает или почему периферия «настроилась», а обмена нет."
 ---
 
 # BE-U1000 на плате EVU-BA-2.1
@@ -234,8 +234,10 @@ description: Разработка прошивок для BE-U1000 (Baikal Elect
 
 Руками не собирать. `template/` — проверенный работающий проект:
 
+Запускайте из каталога, содержащего этот `SKILL.md`; путь к новому проекту задавайте абсолютным.
+
 ```sh
-~/.claude/skills/beu1000-evuba/template/variants/new-project.sh <каталог> [--full|--minimal]
+./template/variants/new-project.sh <каталог> [--full|--minimal]
 cd <каталог> && make BAIKAL_SDK=$HOME/путь/к/SDK_2_1
 ```
 

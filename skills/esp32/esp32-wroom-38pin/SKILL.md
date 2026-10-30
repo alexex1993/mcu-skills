@@ -1,6 +1,6 @@
 ---
 name: esp32-wroom-38pin
-description: Firmware development for the 38-pin ESP32-WROOM-32 development board — Espressif ESP32-DevKitC V4, Ai-Thinker NodeMCU-32S, DOIT ESP32 DevKit V1 38-pin and their CH340/CP2102 clones, 19 pins per side, with GPIO0 and the six in-package flash pins (GPIO6-11, labelled D0 D1 D2 D3 CMD CLK or SD0-SD3) broken out. Use when working on a 38-pin ESP32 devkit (ESP32-D0WDQ6 / ESP32-D0WD-V3, ESP-WROOM-32 or ESP32-WROVER module): project setup, platformio.ini and sdkconfig for ESP-IDF or Arduino, pin mapping and which GPIOs are safe, the flash-pin and IO0 traps, WROVER GPIO16/17 PSRAM conflict, strapping pins, ADC1 vs ADC2 with Wi-Fi, SPI speed and IO_MUX pins, deep sleep and RTC wake pins, flashing, BOOT/EN recovery, brownouts, or debugging why something on the board does not work.
+description: "Firmware development for the 38-pin ESP32-WROOM-32 development board — Espressif ESP32-DevKitC V4, Ai-Thinker NodeMCU-32S, DOIT ESP32 DevKit V1 38-pin and their CH340/CP2102 clones, 19 pins per side, with GPIO0 and the six in-package flash pins (GPIO6-11, labelled D0 D1 D2 D3 CMD CLK or SD0-SD3) broken out. Use when working on a 38-pin ESP32 devkit (ESP32-D0WDQ6 / ESP32-D0WD-V3, ESP-WROOM-32 or ESP32-WROVER module): project setup, platformio.ini and sdkconfig for ESP-IDF or Arduino, pin mapping and which GPIOs are safe, the flash-pin and IO0 traps, WROVER GPIO16/17 PSRAM conflict, strapping pins, ADC1 vs ADC2 with Wi-Fi, SPI speed and IO_MUX pins, deep sleep and RTC wake pins, flashing, BOOT/EN recovery, brownouts, or debugging why something on the board does not work."
 ---
 
 # ESP32-WROOM-32 devkit — 38-pin
@@ -191,8 +191,10 @@ the reset reason, the flash size and the partition table, which answers most of 
 
 Do not hand-assemble one. `template/` builds clean; scaffold from it:
 
+Run from the directory containing this `SKILL.md`; use an absolute path for the new project.
+
 ```sh
-~/.claude/skills/esp32-wroom-38pin/template/variants/new-project.sh <target-dir> [--full|--minimal]
+./template/variants/new-project.sh <target-dir> [--full|--minimal]
 cd <target-dir> && pio run
 ```
 

@@ -1,6 +1,6 @@
 ---
 name: rp2350a-weact
-description: Firmware development for the WeAct Studio RP2350A Core Board (RP2350A — dual Cortex-M33 @ 150 MHz, 520 KB SRAM, 4 MB or 16 MB QSPI flash) in both of its revisions, RP2350A_V10 and RP2350A_V20 — the 40-pin Pico-2-shaped header, 3-or-4-channel 12-bit ADC, PWM, PIO, USB-C CDC, the V1.0 LDO vs V2.0 buck-boost power wiring, and the PlatformIO + arduino-pico (earlephilhower) setup around them. Use when working on this board, a WeAct RP2350 core board of unknown revision, or any Raspberry Pi Pico 2 / RP2350A clone: project setup, platformio.ini, board = rpipico2 vs weact_rp2350b, telling V1.0 and V2.0 apart, pin mapping, LED and KEY pins, powering it from a battery, 4 MB vs 16 MB flash, erratum RP2350-E9 pull-down trouble, BOOT/RESET UF2 flashing, or debugging why something on the board does not work.
+description: "Firmware development for the WeAct Studio RP2350A Core Board (RP2350A — dual Cortex-M33 @ 150 MHz, 520 KB SRAM, 4 MB or 16 MB QSPI flash) in both of its revisions, RP2350A_V10 and RP2350A_V20 — the 40-pin Pico-2-shaped header, 3-or-4-channel 12-bit ADC, PWM, PIO, USB-C CDC, the V1.0 LDO vs V2.0 buck-boost power wiring, and the PlatformIO + arduino-pico (earlephilhower) setup around them. Use when working on this board, a WeAct RP2350 core board of unknown revision, or any Raspberry Pi Pico 2 / RP2350A clone: project setup, platformio.ini, board = rpipico2 vs weact_rp2350b, telling V1.0 and V2.0 apart, pin mapping, LED and KEY pins, powering it from a battery, 4 MB vs 16 MB flash, erratum RP2350-E9 pull-down trouble, BOOT/RESET UF2 flashing, or debugging why something on the board does not work."
 ---
 
 # WeAct Studio RP2350A Core Board (RP2350A)
@@ -161,8 +161,10 @@ pulled low kills the rail and makes the board look bricked with USB attached.
 Do not hand-assemble one. `template/` builds clean for both revisions;
 scaffold from it:
 
+Run from the directory containing this `SKILL.md`; use an absolute path for the new project.
+
 ```sh
-~/.claude/skills/rp2350a-weact/template/variants/new-project.sh <dir> \
+./template/variants/new-project.sh <dir> \
     [--full|--minimal] [--v20|--v10] [--16mb]
 cd <dir> && pio run -t upload -t monitor
 ```

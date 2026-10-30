@@ -1,6 +1,6 @@
-# mcu-skills — Claude Code Skills for Microcontrollers (MCU)
+# mcu-skills — Claude Code and Codex Skills for Microcontrollers (MCU)
 
-**Claude Code skills for MCU firmware development** on STM32, ESP32, ESP8266, RP2040 / RP2350,
+**Claude Code and Codex skills for MCU firmware development** on STM32, ESP32, ESP8266, RP2040 / RP2350,
 nRF52 and AVR boards. These are [Agent Skills](https://docs.claude.com/en/docs/claude-code/skills)
 (`SKILL.md`) for embedded development — one skill per board, holding the board-specific knowledge
 that is otherwise scattered across a datasheet, a reference manual, a schematic and a weekend of
@@ -37,6 +37,64 @@ actually works, which HAL call silently does nothing, and how to get a build ont
 
 ## Install
 
+### Codex
+
+Clone the repository, then install all board skills with one command:
+
+```sh
+git clone https://github.com/alexex1993/mcu-skills.git
+cd mcu-skills
+./scripts/install.sh --codex --all
+```
+
+On Windows, run the PowerShell installer from the clone:
+
+```powershell
+.\scripts\install.ps1 --codex --all
+```
+
+This installs into `~/.agents/skills`, the user skill directory documented in
+[OpenAI's skills guide](https://learn.chatgpt.com/docs/build-skills). Each board is installed
+as a separate skill, with its references, templates and assets. The default is a symlink
+(a directory junction on Windows), so `git pull` updates installed skills. Keep the clone in
+place while using links. Use `--copy` for an independent copy instead.
+
+The same options work with both installers:
+
+```sh
+./scripts/install.sh --codex --list
+./scripts/install.sh --codex rp2040-pico                # just one board
+./scripts/install.sh --codex --all --copy               # standalone copies
+./scripts/install.sh --codex --all --copy --yes         # replace existing installs without prompts
+./scripts/install.sh --codex --uninstall rp2040-pico
+```
+
+`--list` always shows both Claude and Codex installations in separate columns, including
+installation paths and link targets. The directory overrides below also apply to this view.
+
+Existing installations require confirmation before replacement unless `--yes` is supplied.
+Replacing a copy discards local edits in that installed skill. Updating an already-correct
+link is a no-op. To update copies, pull the repository and rerun the copy command.
+
+For a project-scoped install, set `CODEX_SKILLS_DIR` to that project's `.agents/skills`:
+
+```sh
+CODEX_SKILLS_DIR=/path/to/project/.agents/skills ./scripts/install.sh --codex --all --copy
+```
+
+```powershell
+$env:CODEX_SKILLS_DIR = 'C:\path\to\project\.agents\skills'
+.\scripts\install.ps1 --codex --all --copy
+```
+
+`CODEX_SKILLS_DIR` is an override provided by these scripts; it can also point to
+`$CODEX_HOME/skills` if that is where you keep your Codex skills. It is independent of
+`CLAUDE_SKILLS_DIR`.
+
+Codex discovers skills automatically. In the CLI or IDE extension, use `/skills` to browse
+them or mention one explicitly, for example `$rp2040-pico`. If newly installed skills do not
+appear, restart Codex.
+
 ### As a Claude Code plugin
 
 The repo is a plugin marketplace with one plugin per board. Inside Claude Code:
@@ -49,7 +107,7 @@ The repo is a plugin marketplace with one plugin per board. Inside Claude Code:
 Plugin names match the skill names in the table above. Or install from a clone with the
 scripts below.
 
-### macOS / Linux
+### Claude Code: macOS / Linux
 
 ```sh
 git clone https://github.com/alexex1993/mcu-skills.git
@@ -60,7 +118,7 @@ cd mcu-skills
 ./scripts/install.sh --list                   # result
 ```
 
-### Windows
+### Claude Code: Windows
 
 ```powershell
 git clone https://github.com/alexex1993/mcu-skills.git
@@ -83,7 +141,7 @@ inside your firmware project.
 ## Layout
 
 ```
-skills/<family>/<skill-name>/     one skill, ready to copy into ~/.claude/skills
+skills/<family>/<skill-name>/     one skill, shared by Claude Code and Codex
   SKILL.md                        frontmatter + the load-bearing knowledge
   reference/                      deep detail, read on demand
   template/                       a project that actually builds
@@ -106,7 +164,7 @@ Families: `stm32`, `esp32`, `esp8266`, `rp2`, `nrf`, `avr`, `baikal`.
 Add a new directory if yours does not fit — one level, family name only, no vendor nesting.
 
 Skill directory name == the `name:` in its frontmatter, and it must be unique across the whole
-repo: installed skills all land in one flat `~/.claude/skills/` namespace.
+repo: installed skills all land in one flat namespace in the chosen destination directory.
 
 ## Contributing
 
@@ -114,6 +172,9 @@ The short version: find the spec, build a hello world that runs on real hardware
 write the skill from what you learned. Full pipeline in **[CONTRIBUTING.md](CONTRIBUTING.md)**,
 authoring detail in [docs/AUTHORING.md](docs/AUTHORING.md), review bar in
 [docs/CHECKLIST.md](docs/CHECKLIST.md).
+
+For installer changes, run `python3 scripts/test_install.py` (`python` on Windows).
+The checks use temporary destinations; they do not change your installed skills.
 
 Rule of thumb for what belongs here: if the answer is in the vendor's getting-started page and
 the model gets it right without help, leave it out. Everything that cost you an evening goes in.

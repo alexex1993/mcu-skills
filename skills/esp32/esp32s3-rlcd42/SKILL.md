@@ -1,6 +1,6 @@
 ---
 name: esp32s3-rlcd42
-description: Firmware development for the Waveshare ESP32-S3-RLCD-4.2 (SKU 33298 / 33507, and the -EN variant) — an ESP32-S3-WROOM-1-N16R8 AIoT board built around a 4.2" fully reflective 300x400 monochrome LCD on a Sitronix ST7305/ST7306, with no backlight, plus an ES8311 speaker codec, an ES7210 dual-microphone ADC, an SHTC3 temperature/humidity sensor, a PCF85063A RTC, a microSD/TF slot on SDMMC, an 18650 holder with battery sensing, BOOT/KEY/PWR buttons and a 2x8 2.54 mm expansion header. Use when working on this board: project setup, platformio.ini, the qio_opi PSRAM memory type, the pin map and which header pins are traps, U8g2 and the ST7305 constructor, a blank or shifted panel, ST7305 low-power mode HPM/LPM, the shared I2C bus and its four slaves, I2S audio directions and the speaker amplifier enable, mounting the TF card, battery voltage, USB CDC console with no UART bridge, flashing over Type-C, deep sleep, or debugging why something on the board does not work.
+description: "Firmware development for the Waveshare ESP32-S3-RLCD-4.2 (SKU 33298 / 33507, and the -EN variant) — an ESP32-S3-WROOM-1-N16R8 AIoT board built around a 4.2\" fully reflective 300x400 monochrome LCD on a Sitronix ST7305/ST7306, with no backlight, plus an ES8311 speaker codec, an ES7210 dual-microphone ADC, an SHTC3 temperature/humidity sensor, a PCF85063A RTC, a microSD/TF slot on SDMMC, an 18650 holder with battery sensing, BOOT/KEY/PWR buttons and a 2x8 2.54 mm expansion header. Use when working on this board: project setup, platformio.ini, the qio_opi PSRAM memory type, the pin map and which header pins are traps, U8g2 and the ST7305 constructor, a blank or shifted panel, ST7305 low-power mode HPM/LPM, the shared I2C bus and its four slaves, I2S audio directions and the speaker amplifier enable, mounting the TF card, battery voltage, USB CDC console with no UART bridge, flashing over Type-C, deep sleep, or debugging why something on the board does not work."
 ---
 
 # Waveshare ESP32-S3-RLCD-4.2
@@ -275,8 +275,10 @@ levels and battery voltage, which answers most of steps 3-5 in one paste.
 Do not hand-assemble one — the `platformio.ini` has five settings that are wrong by
 default and silent when wrong. Scaffold from `template/`:
 
+Run from the directory containing this `SKILL.md`; use an absolute path for the new project.
+
 ```sh
-~/.claude/skills/esp32s3-rlcd42/template/variants/new-project.sh <target-dir> [--full|--minimal]
+./template/variants/new-project.sh <target-dir> [--full|--minimal]
 cd <target-dir> && pio run
 ```
 

@@ -1,6 +1,6 @@
 ---
 name: esp32s3-cam-40pin
-description: Firmware development for the 40-pin ESP32-S3-WROOM-1 camera board — the Freenove ESP32-S3-WROOM (FNK0085) and the AliExpress "ESP32-S3 CAM" / "ESP32-S3-WROOM N16R8 CAM" clones that copy its header: 20 pins a side, a 24-pin DVP camera FPC connector for an OV2640/OV3660, an on-board microSD slot on the SDMMC bus, a WS2812, two USB-C sockets (CH343 bridge and native USB), ESP32-S3-WROOM-1-N8R8 or N16R8 with 8 MB octal PSRAM. Use when working on this board or any ESP32-S3 DVP camera board: project setup, platformio.ini, the qio_opi PSRAM memory type, camera and SD_MMC pin maps, esp_camera_init failures, PSRAM not found, frame buffer allocation, SD card mount failures, which GPIOs are left once the camera is wired, strapping pins, ADC1/ADC2, flashing over the two USB ports, BOOT/RESET recovery, brownouts, or debugging why the camera, the card or the board does not work.
+description: "Firmware development for the 40-pin ESP32-S3-WROOM-1 camera board — the Freenove ESP32-S3-WROOM (FNK0085) and the AliExpress \"ESP32-S3 CAM\" / \"ESP32-S3-WROOM N16R8 CAM\" clones that copy its header: 20 pins a side, a 24-pin DVP camera FPC connector for an OV2640/OV3660, an on-board microSD slot on the SDMMC bus, a WS2812, two USB-C sockets (CH343 bridge and native USB), ESP32-S3-WROOM-1-N8R8 or N16R8 with 8 MB octal PSRAM. Use when working on this board or any ESP32-S3 DVP camera board: project setup, platformio.ini, the qio_opi PSRAM memory type, camera and SD_MMC pin maps, esp_camera_init failures, PSRAM not found, frame buffer allocation, SD card mount failures, which GPIOs are left once the camera is wired, strapping pins, ADC1/ADC2, flashing over the two USB ports, BOOT/RESET recovery, brownouts, or debugging why the camera, the card or the board does not work."
 ---
 
 # ESP32-S3-WROOM CAM — 40-pin
@@ -257,8 +257,10 @@ strapping levels, which answers most of steps 1-5 in one paste.
 Do not hand-assemble one — the `platformio.ini` has four settings that are wrong by
 default and silent when wrong. Scaffold from `template/`:
 
+Run from the directory containing this `SKILL.md`; use an absolute path for the new project.
+
 ```sh
-~/.claude/skills/esp32s3-cam-40pin/template/variants/new-project.sh <target-dir> [--full|--minimal]
+./template/variants/new-project.sh <target-dir> [--full|--minimal]
 cd <target-dir> && pio run
 ```
 

@@ -49,8 +49,10 @@ none.>
 
 Do not hand-assemble one. `template/` is a verified-working project — scaffold from it:
 
+Run from the directory containing this `SKILL.md`; use an absolute path for the new project.
+
 ```sh
-~/.claude/skills/<skill-name>/template/variants/new-project.sh <target-dir> [--full|--minimal]
+./template/variants/new-project.sh <target-dir> [--full|--minimal]
 cd <target-dir> && <build command>
 ```
 

@@ -1,6 +1,6 @@
 ---
 name: esp32-wroom-30pin
-description: Firmware development for the 30-pin ESP32-WROOM-32 development board — the DOIT ESP32 DevKit V1 / ESP32 CH340 Type-C / NodeMCU-ESP32 30-pin form factor, 15 pins per side, CH340G or CP2102 USB-UART bridge, AMS1117 LDO, user LED on GPIO2. Use when working on a 30-pin ESP32 devkit (ESP32-D0WDQ6 / ESP32-D0WD-V3, ESP-WROOM-32 module): project setup, platformio.ini and sdkconfig for ESP-IDF or Arduino, pin mapping and which GPIOs are safe, strapping pins, ADC1 vs ADC2 with Wi-Fi, SPI speed and IO_MUX pins, I2C, deep sleep and RTC wake pins, flashing over the CH340 bridge, BOOT/EN recovery, brownouts, or debugging why something on the board does not work.
+description: "Firmware development for the 30-pin ESP32-WROOM-32 development board — the DOIT ESP32 DevKit V1 / ESP32 CH340 Type-C / NodeMCU-ESP32 30-pin form factor, 15 pins per side, CH340G or CP2102 USB-UART bridge, AMS1117 LDO, user LED on GPIO2. Use when working on a 30-pin ESP32 devkit (ESP32-D0WDQ6 / ESP32-D0WD-V3, ESP-WROOM-32 module): project setup, platformio.ini and sdkconfig for ESP-IDF or Arduino, pin mapping and which GPIOs are safe, strapping pins, ADC1 vs ADC2 with Wi-Fi, SPI speed and IO_MUX pins, I2C, deep sleep and RTC wake pins, flashing over the CH340 bridge, BOOT/EN recovery, brownouts, or debugging why something on the board does not work."
 ---
 
 # ESP32-WROOM-32 devkit — 30-pin
@@ -177,8 +177,10 @@ that is misbehaving.
 
 Do not hand-assemble one. `template/` builds clean; scaffold from it:
 
+Run from the directory containing this `SKILL.md`; use an absolute path for the new project.
+
 ```sh
-~/.claude/skills/esp32-wroom-30pin/template/variants/new-project.sh <target-dir> [--full|--minimal]
+./template/variants/new-project.sh <target-dir> [--full|--minimal]
 cd <target-dir> && pio run
 ```
 

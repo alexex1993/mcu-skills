@@ -1,6 +1,6 @@
 ---
 name: esp32p4-jc4880p443
-description: Firmware development for the Guition JC4880P443C_I_W (JC4880P443, JC4880P443C, often mistyped JC4880P433) — a 4.3" 480x800 IPS touch display board on the JC-ESP32P4-M3 module (ESP32-P4NRW32, 32 MB PSRAM, 16 MB flash, ESP32-C6 Wi-Fi co-processor on SDIO) — its ST7701S MIPI-DSI panel, GT911 touch, backlight, ES8311 codec with speaker amp and mic, microSD, RS485, battery charger, 2x13 header, and the PlatformIO + ESP-IDF (pioarduino) setup around them. Use when working on this board: project setup, platformio.ini and sdkconfig.defaults, the P4 silicon revision and an "Illegal instruction" boot, a black DSI screen, ST7701 init sequence and timings, GT911 init errors, backlight PWM, choosing a free GPIO, Wi-Fi through esp_hosted and esp_wifi_remote, SD card, audio, flashing over USB-C, or debugging why something on the board does not work.
+description: "Firmware development for the Guition JC4880P443C_I_W (JC4880P443, JC4880P443C, often mistyped JC4880P433) — a 4.3\" 480x800 IPS touch display board on the JC-ESP32P4-M3 module (ESP32-P4NRW32, 32 MB PSRAM, 16 MB flash, ESP32-C6 Wi-Fi co-processor on SDIO) — its ST7701S MIPI-DSI panel, GT911 touch, backlight, ES8311 codec with speaker amp and mic, microSD, RS485, battery charger, 2x13 header, and the PlatformIO + ESP-IDF (pioarduino) setup around them. Use when working on this board: project setup, platformio.ini and sdkconfig.defaults, the P4 silicon revision and an \"Illegal instruction\" boot, a black DSI screen, ST7701 init sequence and timings, GT911 init errors, backlight PWM, choosing a free GPIO, Wi-Fi through esp_hosted and esp_wifi_remote, SD card, audio, flashing over USB-C, or debugging why something on the board does not work."
 ---
 
 # Guition JC4880P443C_I_W (ESP32-P4, 4.3" 480×800)
@@ -220,8 +220,10 @@ Do not hand-assemble one: the platform URL cannot be guessed, the sdkconfig has 
 without which the board does not boot or runs its flash slowly, and the panel needs a
 39-entry init table. Scaffold from `template/`:
 
+Run from the directory containing this `SKILL.md`; use an absolute path for the new project.
+
 ```sh
-~/.claude/skills/esp32p4-jc4880p443/template/variants/new-project.sh <target-dir> [--full|--minimal]
+./template/variants/new-project.sh <target-dir> [--full|--minimal]
 cd <target-dir> && pio run -t upload -t monitor
 ```
 

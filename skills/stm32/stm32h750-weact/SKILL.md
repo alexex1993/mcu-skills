@@ -1,6 +1,6 @@
 ---
 name: stm32h750-weact
-description: Firmware development for the WeAct Studio MiniSTM32H7xx core board (STM32H750VBT6) — its 0.96" ST7735 TFT, DVP camera, QSPI/SPI flash, MicroSD, USB, and the STM32Cube HAL + PlatformIO setup around them. Use when working on this board or any STM32H750/H743 WeAct core board: project setup, platformio.ini, clock/PLL configuration, pin mapping, peripheral bring-up, LCD performance, D-cache/DMA problems, DFU flashing, or debugging why something on the board does not work.
+description: "Firmware development for the WeAct Studio MiniSTM32H7xx core board (STM32H750VBT6) — its 0.96\" ST7735 TFT, DVP camera, QSPI/SPI flash, MicroSD, USB, and the STM32Cube HAL + PlatformIO setup around them. Use when working on this board or any STM32H750/H743 WeAct core board: project setup, platformio.ini, clock/PLL configuration, pin mapping, peripheral bring-up, LCD performance, D-cache/DMA problems, DFU flashing, or debugging why something on the board does not work."
 ---
 
 # WeAct STM32H750VBT6 core board
@@ -87,8 +87,10 @@ animation.
 
 Do not hand-assemble one. `template/` is a verified-working project — scaffold from it:
 
+Run from the directory containing this `SKILL.md`; use an absolute path for the new project.
+
 ```sh
-~/.claude/skills/stm32h750-weact/template/variants/new-project.sh <target-dir> [--full|--minimal]
+./template/variants/new-project.sh <target-dir> [--full|--minimal]
 cd <target-dir> && pio run
 ```
 

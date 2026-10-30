@@ -1,6 +1,6 @@
 ---
 name: esp32c3-oled042
-description: Firmware development for the ESP32-C3 0.42" OLED board (ESP32-C3FH4, QFN32) — the ABRobot / 01Space "ESP32-C3-0.42LCD" mini board and its clones, sold as "ESP32-C3 SuperMini with OLED" and "ESP32 C3 OLED development board". Covers its 72x40 SSD1306 OLED on I2C, the single I2C bus, blue LED on GPIO8, BOOT button on GPIO9, USB Serial/JTAG console, ADC1, Wi-Fi/BLE, and the ESP-IDF + PlatformIO setup around them. Use when working on this board or a bare ESP32-C3: project setup, platformio.ini and sdkconfig, pin mapping and strapping pins, getting the 0.42-inch display to show something other than snow, U8g2 offsets, adding a second I2C device, flashing over USB-C, or debugging why something on the board does not work.
+description: "Firmware development for the ESP32-C3 0.42\" OLED board (ESP32-C3FH4, QFN32) — the ABRobot / 01Space \"ESP32-C3-0.42LCD\" mini board and its clones, sold as \"ESP32-C3 SuperMini with OLED\" and \"ESP32 C3 OLED development board\". Covers its 72x40 SSD1306 OLED on I2C, the single I2C bus, blue LED on GPIO8, BOOT button on GPIO9, USB Serial/JTAG console, ADC1, Wi-Fi/BLE, and the ESP-IDF + PlatformIO setup around them. Use when working on this board or a bare ESP32-C3: project setup, platformio.ini and sdkconfig, pin mapping and strapping pins, getting the 0.42-inch display to show something other than snow, U8g2 offsets, adding a second I2C device, flashing over USB-C, or debugging why something on the board does not work."
 ---
 
 # ESP32-C3 0.42" OLED (ESP32-C3FH4)
@@ -149,8 +149,10 @@ strapping caveat (rule 10).
 
 Do not hand-assemble one. `template/` builds clean; scaffold from it:
 
+Run from the directory containing this `SKILL.md`; use an absolute path for the new project.
+
 ```sh
-~/.claude/skills/esp32c3-oled042/template/variants/new-project.sh <target-dir> [--full|--minimal]
+./template/variants/new-project.sh <target-dir> [--full|--minimal]
 cd <target-dir> && pio run
 ```
 

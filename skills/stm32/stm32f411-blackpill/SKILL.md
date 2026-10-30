@@ -1,6 +1,6 @@
 ---
 name: stm32f411-blackpill
-description: Firmware development for the WeAct Studio "Black Pill" (STM32F411CEU6) and its clones such as the DFRobot DFR0864 — the 25 MHz HSE and 32.768 kHz LSE crystals, PC13 LED, K1 button, USB-C wired straight to USB_OTG_FS, ROM DFU flashing, the SPI-flash footprint, and the STM32Cube HAL + PlatformIO setup around them. Use when working on this board or any STM32F411CE/F401CC Black Pill: project setup, platformio.ini, clock and PLL configuration for 96 MHz plus 48 MHz USB, pin mapping on the 48-pin package, USB CDC console, RTC on the LSE crystal, the internal temperature sensor, ADC accuracy, DFU flashing and recovery, or debugging why something on the board does not work.
+description: "Firmware development for the WeAct Studio \"Black Pill\" (STM32F411CEU6) and its clones such as the DFRobot DFR0864 — the 25 MHz HSE and 32.768 kHz LSE crystals, PC13 LED, K1 button, USB-C wired straight to USB_OTG_FS, ROM DFU flashing, the SPI-flash footprint, and the STM32Cube HAL + PlatformIO setup around them. Use when working on this board or any STM32F411CE/F401CC Black Pill: project setup, platformio.ini, clock and PLL configuration for 96 MHz plus 48 MHz USB, pin mapping on the 48-pin package, USB CDC console, RTC on the LSE crystal, the internal temperature sensor, ADC accuracy, DFU flashing and recovery, or debugging why something on the board does not work."
 ---
 
 # WeAct "Black Pill" — STM32F411CEU6
@@ -92,8 +92,10 @@ USB CDC is the default answer, and it is why rule 2 exists.
 Do not hand-assemble one — the USB stack alone is five files that have to be written, not installed.
 `template/` is a verified-working project; scaffold from it:
 
+Run from the directory containing this `SKILL.md`; use an absolute path for the new project.
+
 ```sh
-~/.claude/skills/stm32f411-blackpill/template/variants/new-project.sh <target-dir> [--full|--minimal]
+./template/variants/new-project.sh <target-dir> [--full|--minimal]
 cd <target-dir> && pio run
 ```
 

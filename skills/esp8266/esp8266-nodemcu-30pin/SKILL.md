@@ -1,6 +1,6 @@
 ---
 name: esp8266-nodemcu-30pin
-description: Firmware development for the 30-pin NodeMCU ESP8266 devkit — NodeMCU DevKit V1.0 / Amica (CP2102) and LoLin NodeMCU V3 (CH340G), built on the Ai-Thinker ESP-12E or ESP-12F module (ESP8266EX, 4 MB flash), with PlatformIO and the Arduino ESP8266 core (`board = nodemcuv2`). Use when working on a NodeMCU, ESP-12E, ESP-12F or ESP8266 devkit: project setup, platformio.ini, the D0-D10 vs GPIO numbering, which pins are safe and which break the boot, GPIO15/GPIO0/GPIO2 strapping, the A0 divider and 1 V ADC, software I2C and software PWM, analogWrite range, LittleFS and flash layouts, OTA, deep sleep and the missing GPIO16-to-RST link, Wi-Fi, heap exhaustion, watchdog and Soft WDT resets, exception decoding, flashing over CP2102/CH340, or debugging why the board does not boot, prints garbage, or reboots by itself.
+description: "Firmware development for the 30-pin NodeMCU ESP8266 devkit — NodeMCU DevKit V1.0 / Amica (CP2102) and LoLin NodeMCU V3 (CH340G), built on the Ai-Thinker ESP-12E or ESP-12F module (ESP8266EX, 4 MB flash), with PlatformIO and the Arduino ESP8266 core (`board = nodemcuv2`). Use when working on a NodeMCU, ESP-12E, ESP-12F or ESP8266 devkit: project setup, platformio.ini, the D0-D10 vs GPIO numbering, which pins are safe and which break the boot, GPIO15/GPIO0/GPIO2 strapping, the A0 divider and 1 V ADC, software I2C and software PWM, analogWrite range, LittleFS and flash layouts, OTA, deep sleep and the missing GPIO16-to-RST link, Wi-Fi, heap exhaustion, watchdog and Soft WDT resets, exception decoding, flashing over CP2102/CH340, or debugging why the board does not boot, prints garbage, or reboots by itself."
 ---
 
 # NodeMCU ESP8266 devkit — 30-pin
@@ -225,8 +225,10 @@ Each stage depends only on the ones before it:
 
 Do not hand-assemble one. `template/` builds clean and was run on hardware:
 
+Run from the directory containing this `SKILL.md`; use an absolute path for the new project.
+
 ```sh
-~/.claude/skills/esp8266-nodemcu-30pin/template/variants/new-project.sh <target-dir> [--full|--minimal]
+./template/variants/new-project.sh <target-dir> [--full|--minimal]
 cd <target-dir> && pio run
 ```
 

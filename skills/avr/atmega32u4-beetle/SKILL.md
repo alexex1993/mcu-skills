@@ -1,6 +1,6 @@
 ---
 name: atmega32u4-beetle
-description: Firmware development for the Beetle — the CJMCU / DFRobot "Mini Arduino Leonardo" USB board (ATmega32U4 @ 16 MHz, 5 V, 21×28 mm, castellated pads) — its native USB (CDC serial + HID keyboard/mouse/joystick), Caterina bootloader and 1200 bps touch upload, ten exposed I/O pads, four PWM pins across Timer0/Timer1, five ADC channels, I2C on D2/D3, SPI on the back-side ICSP pads, 28 KB usable flash and 2.5 KB SRAM, and the PlatformIO + Arduino AVR core (`board = leonardo`) setup around them. Use when working on this board or any ATmega32U4 Leonardo/Micro/Pro-Micro-class clone: project setup, platformio.ini, why the board shows up as two different serial ports, uploads that fail or hang, recovering a bricked or HID-spamming board by shorting the ICSP reset pads, pin mapping and which pads are missing, PWM/timer conflicts, Servo and tone, USB HID keyboard projects, the SRAM budget, powering from the + pad, or debugging why something on the board does not work.
+description: "Firmware development for the Beetle — the CJMCU / DFRobot \"Mini Arduino Leonardo\" USB board (ATmega32U4 @ 16 MHz, 5 V, 21×28 mm, castellated pads) — its native USB (CDC serial + HID keyboard/mouse/joystick), Caterina bootloader and 1200 bps touch upload, ten exposed I/O pads, four PWM pins across Timer0/Timer1, five ADC channels, I2C on D2/D3, SPI on the back-side ICSP pads, 28 KB usable flash and 2.5 KB SRAM, and the PlatformIO + Arduino AVR core (`board = leonardo`) setup around them. Use when working on this board or any ATmega32U4 Leonardo/Micro/Pro-Micro-class clone: project setup, platformio.ini, why the board shows up as two different serial ports, uploads that fail or hang, recovering a bricked or HID-spamming board by shorting the ICSP reset pads, pin mapping and which pads are missing, PWM/timer conflicts, Servo and tone, USB HID keyboard projects, the SRAM budget, powering from the + pad, or debugging why something on the board does not work."
 ---
 
 # Beetle — Mini Arduino Leonardo (ATmega32U4)
@@ -194,8 +194,10 @@ its own. The arithmetic that matters:
 
 Do not hand-assemble one. `template/` builds clean; scaffold from it:
 
+Run from the directory containing this `SKILL.md`; use an absolute path for the new project.
+
 ```sh
-~/.claude/skills/atmega32u4-beetle/template/variants/new-project.sh <target-dir> [--full|--minimal|--hid]
+./template/variants/new-project.sh <target-dir> [--full|--minimal|--hid]
 cd <target-dir> && pio run
 ```
 

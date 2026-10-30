@@ -1,6 +1,6 @@
 ---
 name: esp32c6-lcd147
-description: Firmware development for the Waveshare ESP32-C6-LCD-1.47 board (ESP32-C6FH4, QFN32) — its 1.47" 172x320 ST7789 LCD, WS2812 RGB LED, microSD/TF slot, USB-Serial-JTAG console, Wi-Fi 6/BLE/802.15.4 radio, and the ESP-IDF + PlatformIO setup around them. Use when working on this board or the ESP32-C6-LCD-1.47-M variant (SKU 28563 / 30381, WS-28563): project setup, platformio.ini and sdkconfig, pin mapping and strapping pins, LCD or SD bring-up on the shared SPI bus, backlight brightness, display frame rate, flashing over Type-C, or debugging why something on the board does not work.
+description: "Firmware development for the Waveshare ESP32-C6-LCD-1.47 board (ESP32-C6FH4, QFN32) — its 1.47\" 172x320 ST7789 LCD, WS2812 RGB LED, microSD/TF slot, USB-Serial-JTAG console, Wi-Fi 6/BLE/802.15.4 radio, and the ESP-IDF + PlatformIO setup around them. Use when working on this board or the ESP32-C6-LCD-1.47-M variant (SKU 28563 / 30381, WS-28563): project setup, platformio.ini and sdkconfig, pin mapping and strapping pins, LCD or SD bring-up on the shared SPI bus, backlight brightness, display frame rate, flashing over Type-C, or debugging why something on the board does not work."
 ---
 
 # Waveshare ESP32-C6-LCD-1.47
@@ -132,8 +132,10 @@ double-buffering does not fit — pick two.**
 
 Do not hand-assemble one. `template/` builds clean; scaffold from it:
 
+Run from the directory containing this `SKILL.md`; use an absolute path for the new project.
+
 ```sh
-~/.claude/skills/esp32c6-lcd147/template/variants/new-project.sh <target-dir> [--full|--minimal]
+./template/variants/new-project.sh <target-dir> [--full|--minimal]
 cd <target-dir> && pio run
 ```
 

@@ -1,6 +1,6 @@
 ---
 name: esp32p4-jc-m3-dev
-description: Firmware development for the Guition JC-ESP32P4-M3-DEV board (JC-ESP32P4-M3 module — ESP32-P4NRW32 with 32 MB in-package PSRAM, 16 MB flash, and an ESP32-C6 radio co-processor on SDIO) — its MIPI-DSI panel and MIPI-CSI camera connectors, IP101 Ethernet, ES8311 codec with speaker amplifier and microphone, microSD on SDMMC, RS485, three USB-C sockets, the 26-pin JP1 header, and the PlatformIO + ESP-IDF (pioarduino) setup around them. Use when working on this board or any ESP32-P4 devkit: project setup, platformio.ini and sdkconfig.defaults, the silicon revision split between rev v1.3 and rev v3.x, why the bootloader dies with "Illegal instruction", the pin map and which header pins are traps, Wi-Fi through esp_hosted and esp_wifi_remote, mounting the TF card and its on-chip LDO, bringing up a DSI panel, the shared I2C bus, audio direction and the amplifier enable, Ethernet RMII pins, choosing a free GPIO, flashing over any of the three USB-C ports, or debugging why something on the board does not work.
+description: "Firmware development for the Guition JC-ESP32P4-M3-DEV board (JC-ESP32P4-M3 module — ESP32-P4NRW32 with 32 MB in-package PSRAM, 16 MB flash, and an ESP32-C6 radio co-processor on SDIO) — its MIPI-DSI panel and MIPI-CSI camera connectors, IP101 Ethernet, ES8311 codec with speaker amplifier and microphone, microSD on SDMMC, RS485, three USB-C sockets, the 26-pin JP1 header, and the PlatformIO + ESP-IDF (pioarduino) setup around them. Use when working on this board or any ESP32-P4 devkit: project setup, platformio.ini and sdkconfig.defaults, the silicon revision split between rev v1.3 and rev v3.x, why the bootloader dies with \"Illegal instruction\", the pin map and which header pins are traps, Wi-Fi through esp_hosted and esp_wifi_remote, mounting the TF card and its on-chip LDO, bringing up a DSI panel, the shared I2C bus, audio direction and the amplifier enable, Ethernet RMII pins, choosing a free GPIO, flashing over any of the three USB-C ports, or debugging why something on the board does not work."
 ---
 
 # Guition JC-ESP32P4-M3-DEV
@@ -273,8 +273,10 @@ Do not hand-assemble one: the `platformio.ini` has a platform URL that cannot be
 and the `sdkconfig.defaults` has two lines without which the board does not boot. Scaffold
 from `template/`:
 
+Run from the directory containing this `SKILL.md`; use an absolute path for the new project.
+
 ```sh
-~/.claude/skills/esp32p4-jc-m3-dev/template/variants/new-project.sh <target-dir> [--full|--minimal]
+./template/variants/new-project.sh <target-dir> [--full|--minimal]
 cd <target-dir> && pio run
 ```
 

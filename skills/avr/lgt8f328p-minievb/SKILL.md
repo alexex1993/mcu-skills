@@ -1,6 +1,6 @@
 ---
 name: lgt8f328p-minievb
-description: Firmware development for the LGT8F328P-LQFP32 MiniEVB — the Nano-style 30-pin "purple nano" board whose silkscreen reads LGTBF32BP (also sold as BTE21-15A, WAVGAT, LGT8F328P Nano V3.0), built on the Logic Green / Prodesign LGT8F328P, an AVR-instruction-compatible LGT8XM part with a 32 MHz internal RC and no crystal, a 12-bit ADC, an 8-bit DAC on D4, four timers, 80 mA drive pins, SWD instead of ICSP, and EEPROM emulated in program flash. Use when working on this board, any LGT8F328P/LGT8F328D/LGT8FX8P board, or a sketch being ported from an Arduino Nano or ATmega328P: PlatformIO setup with the lgt8fx core, platformio.ini, f_cpu/f_osc/clock_source and why timings come out 2x wrong, pin mapping and the LQFP32 bonded pads, analogRead resolution and reference errors, analogWrite hitting the DAC, EEPROM vanishing after upload, 80 mA outputs, upload failures over CH340/CH9340/HT42B534, SWD recovery, or debugging why something on the board does not work.
+description: "Firmware development for the LGT8F328P-LQFP32 MiniEVB — the Nano-style 30-pin \"purple nano\" board whose silkscreen reads LGTBF32BP (also sold as BTE21-15A, WAVGAT, LGT8F328P Nano V3.0), built on the Logic Green / Prodesign LGT8F328P, an AVR-instruction-compatible LGT8XM part with a 32 MHz internal RC and no crystal, a 12-bit ADC, an 8-bit DAC on D4, four timers, 80 mA drive pins, SWD instead of ICSP, and EEPROM emulated in program flash. Use when working on this board, any LGT8F328P/LGT8F328D/LGT8FX8P board, or a sketch being ported from an Arduino Nano or ATmega328P: PlatformIO setup with the lgt8fx core, platformio.ini, f_cpu/f_osc/clock_source and why timings come out 2x wrong, pin mapping and the LQFP32 bonded pads, analogRead resolution and reference errors, analogWrite hitting the DAC, EEPROM vanishing after upload, 80 mA outputs, upload failures over CH340/CH9340/HT42B534, SWD recovery, or debugging why something on the board does not work."
 ---
 
 # LGT8F328P-LQFP32 MiniEVB ("LGTBF32BP")
@@ -175,8 +175,10 @@ The reason to pick this chip over a Nano, and where the Arduino API hides the mo
 
 Do not hand-assemble one. `template/` builds clean; scaffold from it:
 
+Run from the directory containing this `SKILL.md`; use an absolute path for the new project.
+
 ```sh
-~/.claude/skills/lgt8f328p-minievb/template/variants/new-project.sh <target-dir> [--full|--minimal]
+./template/variants/new-project.sh <target-dir> [--full|--minimal]
 cd <target-dir> && pio run
 ```
 
